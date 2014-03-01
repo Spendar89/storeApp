@@ -1,0 +1,12 @@
+<template name="default_layout">
+  {{>logs_bootstrap}}
+  <div class="nav">
+     {{>navbar}}
+  </div>
+  <div class="container">
+    {{ yield }}
+  </div>
+  <div class="footer">
+    {{ yield "footer" }}
+  </div>
+</template>
