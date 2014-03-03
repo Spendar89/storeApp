@@ -1,15 +1,3 @@
-currentProductGroup = function () {
-  return Session.get('currentProductGroup');
-};
-
-currentProductPropertyRules = function () {
-  if (currentProductGroup()) {
-    return ProductPropertyRules.find({
-      productGroupId: currentProductGroup()._id
-    }).fetch();
-  }
-};
-
 currentFormAction = function () {
   return Session.get('currentFormAction');
 };

@@ -4,21 +4,28 @@ ProductGroupsController = RouteController.extend({
     'footer': {
       to: 'footer'
     }
-  }
+  },
 
-  // before: function () {},
+  waitOn: function () {
+    currentProductGroup = _.extend(new LiveDoc(null), {
+      getProductPropertyRules: function () {
+        var array = _.toArray(this.get().productPropertyRules);
+        return array || [];
+      }
+    });
+
+    currentStore = new LiveDoc(Stores.findOne());
+  },
 
   // after: function () {},
 
-  // waitOn: function () {
-  //   return Meteor.subscribe('productGroups');
-  // }
-
-  // data: function () {
-  //   return {
-  //     productGroups: ProductGroups.findOne({})
-  //   };
-  // }
+  data: function () {
+    return {
+      currentProductGroup: function () {
+        return currentProductGroup.get();
+      }
+    };
+  }
 
   // action: function () {
   //   /* if we want to override default behavior */
@@ -26,7 +33,7 @@ ProductGroupsController = RouteController.extend({
 });
 
 ProductGroupsIndexController = ProductGroupsController.extend({
-  template: "product_groups_index"
+  template: "productGroupsIndex"
 });
 
 ProductGroupsShowController = ProductGroupsController.extend({
