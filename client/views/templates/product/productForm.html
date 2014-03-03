@@ -1,0 +1,31 @@
+<template name="productForm">
+	<div class="product--form-div">
+
+		{{#autoForm schema=productGroupAutoForm doc=currentProductGroup id=currentFormId }}
+			<div class="row form-header-div">
+				<div class="col-sm-9 left">
+					<h3 class="form-header"> {{formState}} Product Group </h3>
+				</div>
+				<div class="col-sm-3 right">
+					<button type="submit" class="col-sm-12 btn btn-primary {{ currentFormAction }}">
+						{{ currentFormAction }}
+					</button>
+				</div>
+			</div>
+			{{afQuickField 'name'}}
+			{{afQuickField 'category'}}
+			{{afQuickField 'description'}}
+			{{#each productPropertyRules}}
+				<div class="row product-property-row">
+					<div class="col-sm-6">
+						{{afFieldInput productPropertyRule.name autoform=../this placeholder="schemaLabel"}}
+					</div>
+					<div class="col-sm-6">
+						{{afFieldInput productPropertyRule.kind autoform=../this placeholder="schemaLabel"}}
+					</div>
+				</div>
+			{{/each}}s
+			<a href="#" class="btn btn-default add-rule"> Add Product Property Rule</a>
+		{{/autoForm}}
+	</div>
+</template>
