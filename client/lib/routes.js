@@ -13,12 +13,8 @@ Router.map(function () {
   });
 
   this.route('productsIndex', {
-    path: 'products',
+    path: 'product_groups/:_id/products',
     controller: 'ProductsIndexController'
   });
 
-  // provide the actual controller symbol if it's already defined
-  // this.route('postShow', {
-  //   controller: CustomController
-  // });
 });

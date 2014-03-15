@@ -45,8 +45,6 @@ var productPropertyRulesHelper = {
   }
 };
 
-
-
 Template.productGroupForm.helpers({
   productGroupAutoForm: function () {
     var autoForm = new AutoForm(ProductGroups);
@@ -54,6 +52,9 @@ Template.productGroupForm.helpers({
       before: {
         insert: function (doc) {
           doc.storeId = currentStore.get()._id;
+          _.each(doc.productPropertyRules, function (rule, i) {
+            rule.index = i;
+          });
           return doc;
         }
       },
@@ -98,13 +99,19 @@ Template.productGroupForm.helpers({
   },
   formState: function () {
     return Session.get('productGroupFormState') || 'New';
+  },
+  currentFormHeader: function () {
+    return {
+      collectionName: "Product Group",
+      formState: Session.get('productGroupFormState') || 'New',
+      currentFormAction: Session.get("currentFormAction") || "insert"
+    };
   }
 });
 
 Template.productGroupForm.events({
   "click .add-rule": function (e, form) {
     e.preventDefault();
-    // $(form.find('button')).trigger('click');
     productPropertyRulesHelper.addRule();
   }
 

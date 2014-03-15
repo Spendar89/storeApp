@@ -1,32 +1,29 @@
-.navbar-inner {
-  background: transparent !important;
-  border-bottom: 3pt solid #333;
-  border-radius: 0px;
-  padding: 1%;
-}
+@import 'colors'
 
-.currentProductGroup {
-  background: #78E778;
+#productGroupForm {
+  height: 100%;
+  padding: 2%;
+  padding-top: 0%;
+  box-sizing: border-box;
+  .input-div {
+    margin-top: 20px;
+    &.rule-div {
+      border: 1px solid lightgrey;
+      padding: 4%;
+    }
+    .btn {
 
-}
-
-.product-table-div {
-  tr {
-    // border-bottom: 2pt solid #333;
-    td {
-      padding: 10%;
-      font-size: 12pt;
     }
   }
-
 }
 
-.products-list {
+#productGroupsBlock {
+  .product-groups-list {
     ul {
       li {
         list-style: none;
       }
-      .products-row {
+      .product-group-row {
         padding: 2%;
         box-sizing: border-box;
         border: 1px solid #ccc;
@@ -41,3 +38,4 @@
       }
     }
   }
+}
