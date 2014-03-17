@@ -15,7 +15,7 @@ RuleInputs = React.createClass({
   },
 
   addAllowedValue: function () {
-    var valuesCopy = this.state.allowedValues.concat([""])
+    var valuesCopy = this.state.allowedValues.concat([""]);
     this.setState({allowedValues: valuesCopy});
   },
 
@@ -31,11 +31,13 @@ RuleInputs = React.createClass({
     return (
       <div className="form-group rule-inputs">
         <div className="col-sm-12">
-        <label className="control-label">
-          Property Name
+        <label className="control-label col-sm-3">
+          Name
         </label>
-        <input  required className="form-control"
-                valueLink={this.linkState('name')}/>
+        <div className="col-sm-9">
+          <input  required className="form-control"
+                  valueLink={this.linkState('name')}/>
+        </div>
         </div>
       </div>
     )
@@ -44,14 +46,17 @@ RuleInputs = React.createClass({
   renderPropertyKindInput: function () {
     return <div className="form-group rule-inputs">
         <div className="col-sm-12">
-          <label className="control-label">
-            Property Kind
+          <label className="control-label col-sm-3">
+            Kind
           </label>
-          <select className="form-control" valueLink={this.linkState('kind')}>
-            <option value="text">Text</option>
-            <option value="number">Number</option>
-            <option value="product">Product</option>
-          </select>
+          <div className="col-sm-9">
+            <select className="form-control" valueLink={this.linkState('kind')}>
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="product">Product</option>
+              <option value="option">Option</option>
+            </select>
+          </div>
         </div>
     </div>
   },
@@ -59,14 +64,20 @@ RuleInputs = React.createClass({
   renderAllowedValueInputs: function () {
     return (
       <div>
-        <AllowedValueInputs allowedValues={this.state.allowedValues}
-                            handleChange={this.handleAllowedValues}/>
-        <div className="form-group row input-div">
+
+        <div className="form-group input-div">
           <div className="col-sm-12">
-            <a  className="btn btn-default form-control"
-                onClick={this.addAllowedValue}>
-              Add Allowed Value
-            </a>
+            <label className="control-label col-sm-3">
+              Allowed
+            </label>
+            <div className="col-sm-9 pull-right">
+                    <AllowedValueInputs allowedValues={this.state.allowedValues}
+                            handleChange={this.handleAllowedValues}/>
+              <a  className="btn btn-primary form-control"
+                  onClick={this.addAllowedValue}>
+                New Allowed Value
+              </a>
+            </div>
           </div>
         </div>
       </div>

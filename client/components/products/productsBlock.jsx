@@ -22,7 +22,7 @@ ProductsBlock = React.createClass({
 
     return (
       <div className="products-list">
-        <h2> Current {this.state.productGroup.name + "s"} </h2>
+        <h1> Current {this.state.productGroup.name + "s"} </h1>
         <ul className="col-sm-12 row">
           {products.map(function (product, i) {
             var productId = product._id
@@ -41,7 +41,7 @@ ProductsBlock = React.createClass({
               handleEdit: editProduct,
               handleRemove: removeProduct,
               classString: 'products',
-              showPath: '/products/' + productId
+              showPath: 'products/' + productId
             })
           })}
         </ul>

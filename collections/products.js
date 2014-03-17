@@ -10,18 +10,34 @@ getNewProduct = function (productGroup) {
     name: "",
     price: 0,
     slug: "",
+    headline: "",
+    description: "",
+    imageIds: [],
     productGroupId: productGroup._id,
-    properties: {}
+    properties: {},
+    options: {}
   };
 
   _.each(propertyRules, function (rule, i) {
     var name = rule;
-    newProduct.properties[rule.name] = {
-      productPropertyRule: rule,
-      name: name,
-      index: i,
-      value: ""
-    };
+    if (rule.kind === "option") {
+      newProduct.options[rule.name] = [""];
+    } else {
+      newProduct.properties[rule.name] = {
+        productPropertyRule: rule,
+        name: name,
+        index: i,
+        value: ""
+      };
+    }
+
   });
   return newProduct;
+};
+
+Products.newOption = function (product) {
+  return {
+    name: "default name",
+    values: ["value 1", " value 2"]
+  };
 };

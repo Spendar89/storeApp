@@ -17,4 +17,9 @@ Router.map(function () {
     controller: 'ProductsIndexController'
   });
 
+  this.route('productShow', {
+    path: 'product_groups/:product_group_id/products/:_id',
+    controller: 'ProductShowController'
+  });
+
 });

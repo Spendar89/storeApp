@@ -19,7 +19,7 @@ ProductGroupsBlock = React.createClass({
     var productGroups = this.state.productGroups;
     return (
       <div className="product-groups-list">
-        <h2> Current Product Groups </h2>
+        <h1> Current Product Groups </h1>
         <ul className="col-sm-12 row">
           {this.state.productGroups.map(function (productGroup, i) {
             var editProductGroup = function () {

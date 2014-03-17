@@ -18,9 +18,14 @@ ProductGroupForm = React.createClass({
   // ** Rule Input Code **
 
   renderRuleInput: function (productPropertyRule, i) {
-    return <RuleInputs productPropertyRule={productPropertyRule}
-                       key={i}
-                       handleUpdate={this.handleRuleInput}/>
+    return(
+            <div className="form-section">
+              <RuleInputs productPropertyRule={productPropertyRule}
+                          key={i}
+                          handleUpdate={this.handleRuleInput}/>
+            </div>
+           )
+
   },
 
   handleRuleInput: function (ruleKey, ruleState) {
@@ -82,37 +87,44 @@ ProductGroupForm = React.createClass({
 
   render: function () {
     var headerText;
+    var productGroup = this.state.productGroup;
+    var productPropertyRules = productGroup.productPropertyRules;
     if (this.state.isEditing) {
-      headerText = 'Edit Product Group: ' + this.state.productGroup.name;
+      headerText = 'Edit Product Group: ' + productGroup.name;
     } else {
       headerText = 'Add a New Product Group';
     }
     return (
       <div className="product-form-div">
-        <h3> {headerText} </h3>
+        <h1> {headerText} </h1>
 
-        <form className="form form-horizontal">
-          <h4 className="product-property-rules-inputs-header">
+        <form className="form form-horizontal product-group-form">
+          <h2 className="product-property-rules-inputs-header">
             General Properties
-          </h4>
+          </h2>
+          <div className="form-section">
 
-          {this.renderDefaultInputs()}
+            {this.renderDefaultInputs()}
+          </div>
 
-          <h4 className="product-property-rules-inputs-header">
-            Product Property Rules
-          </h4>
-          {this.state.productGroup.productPropertyRules
-            .map(this.renderRuleInput)}
+            <div className="form-group row input-div">
+              <h2 className="product-property-rules-inputs-header">
+              <div className="col-sm-8">
+                Product Property Rules
+                </div>
+                <div className="col-sm-4">
+                <a className="btn btn-primary form-control" onClick={this.addRule}>
+                  New Rule
+                </a>
+              </div>
+              </h2>
+
+            </div>
+            {productPropertyRules.map(this.renderRuleInput)}
+
         </form>
 
-        <div className="form-group row input-div">
-          <div className="col-sm-12">
-            <a  className="btn btn-primary form-control"
-                onClick={this.addRule}>
-              Add Product Property Rule
-            </a>
-          </div>
-        </div>
+
 
         <div className="form-group row input-div">
           <div className="col-sm-12">
@@ -144,11 +156,13 @@ DefaultInput =  React.createClass({
     return (
        <div className="form-group default-inputs">
         <div className="col-sm-12">
-          <label className="control-label">
+          <label className="control-label col-sm-3">
             {Util.capitalizedString(this.props.key)}
           </label>
-          <input  className="form-control" required
-                  valueLink={this.linkState('value')}/>
+          <div className="col-sm-9">
+            <input  className="form-control" required
+                    valueLink={this.linkState('value')}/>
+          </div>
         </div>
       </div>
     )
