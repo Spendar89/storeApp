@@ -18,7 +18,7 @@ Meteor.methods({
 
   insertAndReturn: function (Collection, params) {
     var id = Collection.insert(params);
-    return Collection.findOne(id);
+    return Collecftion.findOne(id);
   },
 
   productsUpsert: function (product, callback) {
@@ -35,5 +35,16 @@ Meteor.methods({
 
   productsRemove: function (productId) {
     return Products.remove(productId);
+  },
+
+  cartsUpsert: function (cart, callback) {
+    // Carts.remove({userId: this.userId});
+    if (this.userId) {
+      return Carts.upsert({_id: cart._id}, cart);
+    }
+  },
+
+  cartProductRemove: function (cartProductId) {
+    return CartProducts.remove(cartProductId);
   }
 });

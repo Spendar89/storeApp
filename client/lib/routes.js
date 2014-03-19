@@ -1,6 +1,4 @@
 Router.map(function () {
-
-  // provide a String to evaluate later
   this.route('productGroupsIndex', {
     path: 'product_groups',
     controller: 'ProductGroupsIndexController',
@@ -21,5 +19,4 @@ Router.map(function () {
     path: 'product_groups/:product_group_id/products/:_id',
     controller: 'ProductShowController'
   });
-
 });

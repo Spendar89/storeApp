@@ -1,0 +1,41 @@
+@import '../../styles/colors.import'
+
+.cart-block-div
+  height 0px
+  -webkit-transition all 0.2s ease
+  overflow hidden
+  background black
+  // h2.header
+  //   text-align center
+  //   margin 0
+  &.open
+    height 150px
+    // border-bottom 2pt solid black
+
+
+.cart-product-block-div
+  height 150px
+  overflow hidden
+  .remove-x
+    position relative
+    color grey
+    font-size 10pt
+    float right
+    cursor pointer
+    margin-right 10px
+    z-index 2
+
+  .name-price-div
+    position relative
+    background rgba(255, 255, 255, 0.67)
+    height 100%
+    width 100%
+    padding 2%
+    font-weight bold
+    .product-price
+      position: absolute;
+      left: 25%;
+      top: 25%;
+
+  .cart-product-img
+    width: 100%

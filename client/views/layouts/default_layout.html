@@ -1,12 +1,23 @@
 <template name="default_layout">
-  {{>logs_bootstrap}}
-  <div class="nav">
-     {{>navbar}}
-  </div>
+  {{>navbar}}
   <div class="container-fluid">
     {{ yield }}
   </div>
-  <div class="footer">
-    {{ yield "footer" }}
+</template>
+
+<template name="navbar">
+  <div class="nav">
+    <div class="navbar" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/product_groups">{{currentStore.name}}</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+           <li class="active" id="showCart"><a href="#">Cart</a></li>
+          {{ loginButtons }} <!-- here -->
+        </ul>
+      </div>
+    </div>
+    <section id="cartBlock"></section>
   </div>
 </template>

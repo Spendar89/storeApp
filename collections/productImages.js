@@ -10,6 +10,12 @@ ProductImages.filter({
   }
 });
 
+ProductImages.getUrls = function (images) {
+  return images.map(function (image) {
+    return image.fileHandler.default.url;
+  });
+};
+
 if (Meteor.isServer) {
 
   var handler = {

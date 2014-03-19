@@ -28,24 +28,27 @@ Meteor.publish("all_products", function () {
 
 Meteor.publish("productGroupProducts", function (id) {
   var products;
-  var newProduct;
-
   if (id) {
-    // newProduct = Products.findOne({
-    //   isNew: true
-    // });
-    // if (!newProduct) Meteor.call("insertNewProduct", id);
     products = Products.find({
       productGroupId: id
     });
   }
   return products;
+});
 
+Meteor.publish("store_products", function (storeId) {
+  if (storeId) {
+    var productGroupIds = ProductGroups.find({storeId: storeId}).map(function (pg) {return pg._id});
+    return Products.find({productGroupId: {$in: productGroupIds}});
+  }
 });
 
 Meteor.publish("all_product_images", function () {
   return ProductImages.find();
-  // if (this.userId) {
-  //   return ContactsFS.find({ owner: this.userId }, { limit: 30 });
-  //  }
+});
+
+Meteor.publish("user_cart", function () {
+  if (this.userId) {
+    return Carts.find({userId: this.userId});
+  }
 });

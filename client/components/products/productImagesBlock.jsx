@@ -6,7 +6,7 @@ ProductImagesBlock = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
-    var product = Session.get("product");
+    var product = this.props.product || Session.get("product");
     return {
       images: ProductImages.find({_id: {$in: product.imageIds}}).fetch()
     };
@@ -25,8 +25,20 @@ ProductImagesBlock = React.createClass({
             )
   },
 
+  renderIndexImage: function () {
+    var index = this.props.imageIndex;
+    var url = this.getUrl(this.state.images[index]);
+    var className = this.props.className;
+    var style = {background: "url("+url+")"}
+    return (
+      <div src={url} className={className} style={style}></div>
+    )
+  },
+
   render: function () {
-    if (this.state.images[0]) {
+    if(this.props.imageIndex) {
+      return this.renderIndexImage();
+    } else if (this.state.images[0]) {
       return this.renderPrimaryImage();
     } else {
       return <div>No Image</div>

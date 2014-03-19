@@ -1,4 +1,4 @@
-ProductGroupsIndexController = RouteController.extend({
+ProductGroupsIndexController = ApplicationController.extend({
   layoutTemplate: 'default_layout',
 
   before: function () {

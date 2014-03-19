@@ -3,19 +3,14 @@
  */
 
 ProductDetailBlock = React.createClass({
-  mixins: [ReactMeteor.Mixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    var product = Session.get("product");
-    var productGroup = Session.get("productGroup");
     return {
-      productGroup: productGroup,
-      product: product
+      productGroup: Session.get("productGroup"),
+      product: Session.get("product"),
+      cartProduct: Session.get("cartProduct")
     };
-  },
-
-  renderSpecs: function () {
-
   },
 
   renderBasic: function () {
@@ -31,14 +26,13 @@ ProductDetailBlock = React.createClass({
 
   renderProperty: function (property, propertyName) {
     if (property.value) {
-     return (
-          <div>
-            <dt>{propertyName}</dt>
-            <dd>{property.value}</dd>
-          </div>
-          )
+      return (
+        <div>
+          <dt>{propertyName}</dt>
+          <dd>{property.value}</dd>
+        </div>
+      )
     }
-
   },
 
   renderProperties: function () {
@@ -53,47 +47,32 @@ ProductDetailBlock = React.createClass({
             )
   },
 
-  renderOption: function (optionValues, optionName) {
-    var renderValue = function (optionValue, i) {
-      return (
-        <option key={i}
-                value={optionValue}>
-          {optionValue}
-        </option>
-      )
-    };
-    return (
-            <div className="row">
-              <label className="col-sm-3"><h3>{optionName}</h3></label>
-              <div className="col-sm-9">
-                <select className="form-control bordered">
-                  {optionValues.map(renderValue)}
-                </select>
-              </div>
-            </div>
-            )
+  renderAddToCartBtn: function () {
+    return <AddToCartBtn cartProduct={this.state.cartProduct}/>
   },
 
-  renderOptions: function () {
-    var product = this.state.product;
+  renderCartProductOptionSelects: function () {
     return (
-            <div className="product-options-div">
-              <h1> Options </h1>
-              <dl className="dl-horizontal product-options-div">
-                {_.map(product.options, this.renderOption)}
-              </dl>
-            </div>
-          )
+      <div className="product-options-div">
+        <h1> Options </h1>
+        <dl className="dl-horizontal product-options-div">
+          {_.map(this.state.product.options, function(values, key) {
+            return <CartProductOptionSelect optionValues={values}
+                                            key={key} />
+          })}
+        </dl>
+      </div>
+    )
   },
 
   render: function () {
-
     return (
-            <div className="product-detail-block-div row">
-              {this.renderBasic()}
-              {this.renderOptions()}
-              {this.renderProperties()}
-            </div>
-          )
+      <div className="product-detail-block-div row">
+        {this.renderBasic()}
+        {this.renderCartProductOptionSelects()}
+        {this.renderAddToCartBtn()}
+        {this.renderProperties()}
+      </div>
+    )
   }
 });
