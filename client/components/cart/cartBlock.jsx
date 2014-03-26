@@ -25,7 +25,7 @@ CartBlock = React.createClass({
       that.removeCartProduct(i);
     };
     return (
-      <div className="col-sm-2 row">
+      <div className="col-sm-2 padding-bottom">
         <CartProductBlock handleClick={removeCartProduct}
                           cartProduct={cartProduct}
                           key={i} />
@@ -36,11 +36,11 @@ CartBlock = React.createClass({
   render: function () {
     return (
       <div className="cart-block-div">
-        <div className="col-sm-12">
-          <div className="row">
+
+
             {this.state.cart.cartProducts.map(this.renderCartProductBlock)}
-          </div>
-        </div>
+
+
       </div>
     )
   }

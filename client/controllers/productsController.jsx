@@ -58,7 +58,6 @@ ProductShowController = ApplicationController.extend({
 
   waitOn: function () {
 
-
     return Meteor.subscribe('store_products', 'q2dMF25K4Jb3Q3j7Y');
   },
 
