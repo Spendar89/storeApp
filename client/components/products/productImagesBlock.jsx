@@ -19,8 +19,16 @@ ProductImagesBlock = React.createClass({
   renderPrimaryImage: function () {
     var url = this.getUrl(this.state.images[0]);
     return (
-            <div className="primary-image-div row">
-              <img src={url} className="img primary col-sm-10"/>
+            <div className="primary-image-div">
+              <div className="primary-image row">
+                <img src={url} className="img primary col-sm-10"/>
+              </div>
+              <div className="other-images-div row">
+                <div className="other-image col-sm-2"></div>
+                <div className="other-image col-sm-2"></div>
+                <div className="other-image col-sm-2"></div>
+                <div className="other-image col-sm-2"></div>
+              </div>
             </div>
             )
   },

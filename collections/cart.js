@@ -8,6 +8,12 @@ _.extend(Carts, {
       cartProducts: [],
       subtotal: 0
     };
+  },
+
+  getSubtotal: function (cart) {
+    return _.reduce(cart.cartProducts, function (sum, cartProduct) {
+      return sum + parseInt(cartProduct.price);
+    }, 0);
   }
 });
 

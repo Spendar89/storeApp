@@ -27,9 +27,9 @@ AddToCartBtn = React.createClass({
 
   afterSave: function (error, success) {
     if (success) {
-      console.log("successfully saved cart");
+      // do something if saved
     } else {
-      console.log("whoops didn't save")
+      console.log("whoops didn't save");
     }
   },
 

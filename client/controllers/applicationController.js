@@ -2,11 +2,10 @@ ApplicationController = RouteController.extend({
   waitOnDefaults: function () {
     return [this.subscribe('current_stores', 'q2dMF25K4Jb3Q3j7Y').wait(),
       this.subscribe('current_store_product_groups', 'q2dMF25K4Jb3Q3j7Y').wait(),
-      this.subscribe('all_product_images').wait(),  this.subscribe("user_cart").wait()];
+      this.subscribe('all_product_images').wait(), this.subscribe("user_cart").wait()];
   },
 
   setCartSession: function () {
-    console.log("setting cart session");
     var data = this.cartData();
     Session.set("newCart", data.newCart);
     Session.set("cartId", data.cartId);
@@ -30,15 +29,25 @@ ApplicationController = RouteController.extend({
 
   cartData: function () {
     var currentUserId = Session.get("currentUserId");
-    var cart = Carts.findOne();
+
+    var cart = Carts.findOne({userId: currentUserId});
+    var friendId = Session.get("friendId");
+    if (friendId) {
+      console.log("getting friend's cart");
+      this.subscribe("friend_cart", friendId).wait();
+      var friendCart = Carts.findOne({userId: friendId});
+      if(friendCart) {
+        Session.set("friendCartId", friendCart._id);
+      }
+    }
     return {
       cartId: cart && cart._id,
       newCart: Carts.build(currentUserId)
-    }
+    };
   },
 
   before: function () {
     this.setDefaultSessions();
     this.setCartSession();
   }
-})
+});

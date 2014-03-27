@@ -9,8 +9,8 @@ CartProductBlock = React.createClass({
     var product = Products.findOne(cartProduct.productId);
     var imageUrl = Products.getImageUrls(product)[0];
     var backgroundImage = {
-      "background": "url("+imageUrl+") 50% 75%",
-      "background-size": "200%"
+      "background": "white url("+imageUrl+") 50% 75% no-repeat",
+      "background-size": "contain"
     }
     return (
       <div className="cart-product-block-div" style={backgroundImage}>

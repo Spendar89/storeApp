@@ -5,42 +5,38 @@
   -webkit-transition all 0.2s ease
   overflow hidden
   background black;
-
-  // background url('images/tweed.png')
-  // h2.header
-  //   text-align center
-  //   margin 0
   &.open
     height 195px
     padding-top 15px
     padding-bottom 15px
-    // border-bottom 2pt solid black
 
+  .cart-products-div
+    .cart-product-block-div
+      height 165px
+      overflow hidden
+      -webkit-transition all 0.2s ease
+      .remove-x
+        position relative
+        color grey
+        font-size 10pt
+        float right
+        cursor pointer
+        margin-right 10px
+        z-index 2
 
-.cart-product-block-div
-  height 165px
-  overflow hidden
-  -webkit-transition all 0.2s ease
-  .remove-x
-    position relative
-    color grey
-    font-size 10pt
-    float right
-    cursor pointer
-    margin-right 10px
-    z-index 2
+      .name-price-div
+        position relative
+        background rgba(255, 255, 255, 0.67)
+        height 100%
+        width 100%
+        padding 2%
+        font-weight bold
+        .product-price
+          margin-top: 0;
+          text-align left
 
-  .name-price-div
-    position relative
-    background rgba(255, 255, 255, 0.67)
+      .cart-product-img
+        width: 100%
+  .cart-summary-div
+    color white
     height 100%
-    width 100%
-    padding 2%
-    font-weight bold
-    .product-price
-      position: absolute;
-      left: 25%;
-      top: 25%;
-
-  .cart-product-img
-    width: 100%

@@ -52,3 +52,9 @@ Meteor.publish("user_cart", function () {
     return Carts.find({userId: this.userId});
   }
 });
+
+Meteor.publish("friend_cart", function (friendId) {
+  if (this.userId) {
+    return Carts.find({userId: {$in: [friendId, this.userId]}});
+  }
+});

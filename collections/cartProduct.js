@@ -5,8 +5,9 @@ _.extend(CartProducts, {
     var productId = product && product._id;
     return {
       productId: productId,
+      product: product,
       options: {},
-      subtotal: 0
+      price: product.price
     };
   }
 });

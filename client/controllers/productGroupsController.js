@@ -14,15 +14,17 @@ ProductGroupsIndexController = ApplicationController.extend({
     };
   },
 
+  renderComponents: function () {
+    React.renderComponent(ProductGroupsBlock({}),
+      document.getElementById('productGroupsBlock')
+    );
+    React.renderComponent(ProductGroupForm({}),
+      document.getElementById('productGroupForm')
+    );
+  },
+
   action: function () {
     if (this.newProductGroup) this.render();
-    Template[this.template].rendered = function () {
-      React.renderComponent(ProductGroupsBlock({}),
-        document.getElementById('productGroupsBlock')
-      );
-      React.renderComponent(ProductGroupForm({}),
-        document.getElementById('productGroupForm')
-      );
-    };
+    Template[this.template].rendered = this.renderComponents.bind(this);
   }
 });

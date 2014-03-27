@@ -14,7 +14,7 @@ CartBlock = React.createClass({
   },
 
   removeCartProduct: function (index) {
-    var cartCopy = _.extend({}, this.state.cart)
+    var cartCopy = _.extend({}, this.state.cart);
     cartCopy.cartProducts.splice(index, 1);
     Meteor.call("cartsUpsert", cartCopy);
   },
@@ -24,8 +24,12 @@ CartBlock = React.createClass({
     var removeCartProduct = function () {
       that.removeCartProduct(i);
     };
+    var getClassCols = function () {
+      var numberProducts = that.state.cart.cartProducts.length;
+      return "col-sm-" + parseInt(12 / numberProducts);
+    };
     return (
-      <div className="col-sm-2 padding-bottom">
+      <div className={getClassCols()} key={i}>
         <CartProductBlock handleClick={removeCartProduct}
                           cartProduct={cartProduct}
                           key={i} />
@@ -36,11 +40,12 @@ CartBlock = React.createClass({
   render: function () {
     return (
       <div className="cart-block-div">
-
-
-            {this.state.cart.cartProducts.map(this.renderCartProductBlock)}
-
-
+        <div className="cart-products-div col-sm-9">
+          {this.state.cart.cartProducts.map(this.renderCartProductBlock)}
+        </div>
+        <div className="cart-summary-div col-sm-3">
+          <h1> Subtotal: ${this.state.cart.subtotal}</h1>
+        </div>
       </div>
     )
   }

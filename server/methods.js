@@ -38,8 +38,8 @@ Meteor.methods({
   },
 
   cartsUpsert: function (cart, callback) {
-    // Carts.remove({userId: this.userId});
     if (this.userId) {
+      cart.subtotal = Carts.getSubtotal(cart);
       return Carts.upsert({_id: cart._id}, cart);
     }
   },
