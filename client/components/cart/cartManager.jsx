@@ -7,22 +7,19 @@ CartManager = React.createClass({
 
   getMeteorState: function () {
     return {
-      cart: Carts.findOne(Session.get("cartId")),
+      cart: Carts.findOne(Session.get("cartId")) || Session.get("newCart"),
       allCarts: Carts.find().fetch()
     };
   },
 
   renderCart: function (cart) {
-    if (cart) {
-      return <CartBlock cart={cart} key={cart._id}/>
-    }
-
+    return <CartBlock cart={cart} key={cart._id}/>
   },
 
   render: function () {
     return (
       <div className="cart-manager-div">
-        {_.map([this.state.allCarts], this.renderCart)}
+        { _.map(this.state.allCarts, this.renderCart) }
       </div>
     )
   }

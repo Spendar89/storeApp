@@ -44,7 +44,20 @@ Meteor.methods({
     }
   },
 
+  cartsRemove: function (cart, callback) {
+    if (this.userId && cart) {
+      Carts.remove(cart._id);
+    }
+  },
+
   cartProductRemove: function (cartProductId) {
     return CartProducts.remove(cartProductId);
+  },
+
+  addFriend: function (userId, friendId) {
+    //Make new friends collection with just user ids...
+    var friendIds = user.friendIds || [];
+    user.friendIds = friendIds.concat(friendId);
+    return Meteor.users.upsert({_id: user._id}, user);
   }
 });

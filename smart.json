@@ -3,9 +3,9 @@
     "iron-router": {},
     "collection2": {},
     "bootstrap-3": {},
-    "accounts-ui-bootstrap-3": {},
     "autoform": {},
-    "observatory": {},
-    "collectionFS": {}
+    "collectionFS": {},
+    "cfs-filesystem": {},
+    "accounts-ui-bootstrap-3-blaze": {}
   }
 }

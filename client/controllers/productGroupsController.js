@@ -1,8 +1,9 @@
 ProductGroupsIndexController = ApplicationController.extend({
   layoutTemplate: 'default_layout',
 
-  before: function () {
-    var data = this.getData();
+  onBeforeAction: function () {
+    var data = this.data();
+    console.log(data);
     this.newProductGroup = data.newProductGroup;
     Session.set("newProductGroup", this.newProductGroup);
   },
@@ -14,17 +15,22 @@ ProductGroupsIndexController = ApplicationController.extend({
     };
   },
 
-  renderComponents: function () {
-    React.renderComponent(ProductGroupsBlock({}),
-      document.getElementById('productGroupsBlock')
-    );
-    React.renderComponent(ProductGroupForm({}),
-      document.getElementById('productGroupForm')
-    );
+  action: function () {
+    if (this.ready()) {
+      this.render();
+    }
   },
 
-  action: function () {
-    if (this.newProductGroup) this.render();
-    Template[this.template].rendered = this.renderComponents.bind(this);
+  onAfterAction: function () {
+    var templateName = this.lookupTemplate();
+    Template[templateName].rendered = function () {
+      React.renderComponent(ProductGroupsBlock({}),
+        document.getElementById('productGroupsBlock')
+      );
+      React.renderComponent(ProductGroupForm({}),
+        document.getElementById('productGroupForm')
+      );
+    };
+
   }
 });

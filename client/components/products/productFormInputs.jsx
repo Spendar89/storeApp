@@ -42,7 +42,7 @@ ProductPropertyInputs = React.createClass({
 });
 
 ProductPropertyInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -106,7 +106,7 @@ ProductPropertyInput = React.createClass({
 });
 
 ProductDefaultInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     var product = this.props.product;
@@ -135,7 +135,7 @@ ProductDefaultInputs = React.createClass({
 });
 
 ProductDefaultInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -211,7 +211,7 @@ ProductImagesInput = React.createClass({
 });
 
 ProductOptionInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -264,7 +264,7 @@ ProductOptionInputs = React.createClass({
 });
 
 ProductOptionValueInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     return {

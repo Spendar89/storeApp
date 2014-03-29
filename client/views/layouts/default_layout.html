@@ -1,7 +1,7 @@
 <template name="default_layout">
   {{>navbar}}
   <div class="container-fluid">
-    {{ yield }}
+    {{> yield }}
   </div>
 </template>
 
@@ -14,7 +14,7 @@
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
            <li class="active" id="showCart"><a href="#">Cart</a></li>
-          {{ loginButtons }} <!-- here -->
+          {{> loginButtons}} <!-- here -->
         </ul>
       </div>
     </div>

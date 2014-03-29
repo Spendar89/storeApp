@@ -11,8 +11,8 @@ ProductsIndexController = ApplicationController.extend({
     return Meteor.subscribe('store_products', 'q2dMF25K4Jb3Q3j7Y');
   },
 
-  before: function () {
-    var data = this.getData();
+  onBeforeAction: function () {
+    var data = this.data();
 
     if(data && data.newProduct) {
       Session.set("newProduct", data.newProduct);
@@ -33,7 +33,7 @@ ProductsIndexController = ApplicationController.extend({
   },
 
   renderComponents: function () {
-    React.renderComponent(<CartBlock/>,
+    React.renderComponent(<CartManager/>,
                           document.getElementById('cartBlock'));
     React.renderComponent(<ProductsBlock key={this.params._id} />,
                           document.getElementById('productGroupBlock'));
@@ -61,8 +61,8 @@ ProductShowController = ApplicationController.extend({
     return Meteor.subscribe('store_products', 'q2dMF25K4Jb3Q3j7Y');
   },
 
-  before: function () {
-    var data = this.getData();
+  onBeforeAction: function () {
+    var data = this.data();
     if(data && data.product) {
       Session.set("cartProduct", data.cartProduct);
       Session.set("product", data.product);
@@ -84,7 +84,7 @@ ProductShowController = ApplicationController.extend({
 
   renderComponents: function () {
 
-    React.renderComponent(<CartBlock/>,
+    React.renderComponent(<CartManager/>,
                           document.getElementById('cartBlock'));
 
     React.renderComponent(<ProductImagesBlock/>,
@@ -93,10 +93,9 @@ ProductShowController = ApplicationController.extend({
     React.renderComponent(<ProductDetailBlock/>,
                           document.getElementById('productDetailBlock'));
 
-    var $cartBlockDiv = $(".cart-block-div");
     $("#showCart").click(function (e) {
       e.preventDefault();
-      $cartBlockDiv.toggleClass("open");
+      $(".cart-block-div").toggleClass("open");
     });
   },
 

@@ -6,8 +6,9 @@ ProductGroupForm = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
-    var editProductGroup = ProductGroups.findOne(Session.get("editProductGroupId"));
-    var productGroup = editProductGroup || Session.get("newProductGroup");;
+    var editProductGroupId = Session.get("editProductGroupId");
+    var editProductGroup = ProductGroups.findOne(editProductGroupId);
+    var productGroup = editProductGroup || Session.get("newProductGroup");
     return {
       productGroup: productGroup,
       isEditing: productGroup._id ? true : false,
@@ -82,7 +83,8 @@ ProductGroupForm = React.createClass({
   },
 
   handleSubmit: function () {
-    Meteor.call("productGroupsUpsert", this.state.productGroup, this.afterSave);
+    var productGroup =  this.state.productGroup;
+    Meteor.call("productGroupsUpsert", productGroup, this.afterSave);
   },
 
   render: function () {
@@ -113,7 +115,8 @@ ProductGroupForm = React.createClass({
                 Product Property Rules
                 </div>
                 <div className="col-sm-4">
-                <a className="btn btn-primary form-control" onClick={this.addRule}>
+                <a className="btn btn-primary form-control"
+                   onClick={this.addRule}>
                   New Rule
                 </a>
               </div>
@@ -140,7 +143,7 @@ ProductGroupForm = React.createClass({
 });
 
 DefaultInput =  React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
 
   getMeteorState: function () {
     return {

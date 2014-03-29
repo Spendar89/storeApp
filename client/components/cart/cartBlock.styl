@@ -6,11 +6,13 @@
   overflow hidden
   background black;
   &.open
+
     height 195px
-    padding-top 15px
-    padding-bottom 15px
 
   .cart-products-div
+    padding-top 15px
+    padding-bottom 15px
+    font-family: gotham;
     .cart-product-block-div
       height 165px
       overflow hidden
@@ -30,13 +32,33 @@
         height 100%
         width 100%
         padding 2%
-        font-weight bold
+
+        margin-top 0
+        .product-name
+          font-weight normal
+          text-align center
         .product-price
-          margin-top: 0;
-          text-align left
+          font-weight bold
+          text-align center
+      .cart-product-options-div
+        display none
+        position: absolute;
+        top: 50px;
+        font-size: 16pt;
+        text-align: left;
 
       .cart-product-img
         width: 100%
+
   .cart-summary-div
     color white
     height 100%
+    .cart-subtotal
+      text-align center
+
+  .cart-friends-div
+      background #3E467F
+      color white
+      height 100%
+      .cart-friends-header
+        text-align center

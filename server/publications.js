@@ -47,6 +47,12 @@ Meteor.publish("all_product_images", function () {
   return ProductImages.find();
 });
 
+Meteor.publish("friends", function (friendIds) {
+  if (this.userId) {
+    return Users.find({_id: {$in: friendIds.concat([this.userId])}})
+  }
+});
+
 Meteor.publish("user_cart", function () {
   if (this.userId) {
     return Carts.find({userId: this.userId});
@@ -54,7 +60,15 @@ Meteor.publish("user_cart", function () {
 });
 
 Meteor.publish("friend_cart", function (friendId) {
-  if (this.userId) {
+  if (this.userId && friendId) {
     return Carts.find({userId: {$in: [friendId, this.userId]}});
   }
+});
+
+Meteor.publish("storeDefaults", function (storeId) {
+  var stores = Stores.find({ _id: storeId });
+  var productGroups = ProductGroups.find({ storeId: storeId });
+  var productImages = ProductImages.find();
+  var userCart = Carts.find({userId: this.userId});
+  return [stores, productGroups, productImages, userCart];
 });

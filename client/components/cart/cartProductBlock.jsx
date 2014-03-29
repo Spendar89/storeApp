@@ -3,6 +3,9 @@
  */
 
 CartProductBlock = React.createClass({
+  renderOption: function (optionValue, optionKey) {
+    return <CartProductOption value={optionValue} key={optionKey}/>
+  },
 
   render: function () {
     var cartProduct = this.props.cartProduct;
@@ -19,9 +22,23 @@ CartProductBlock = React.createClass({
           X
         </a>
         <div className="name-price-div">
+          <h1 className="product-name">{product.name}</h1>
           <h1 className="product-price">${product.price}</h1>
+        </div>
+        <div className="cart-product-options-div">
+          {_.map(cartProduct.options, this.renderOption)}
         </div>
       </div>
     )
   }
 });
+
+CartProductOption = React.createClass({
+  render: function () {
+    return (
+      <div className="col-sm-12 cart-product-option">
+        {this.props.key}: {this.props.value}
+      </div>
+    )
+  }
+})
