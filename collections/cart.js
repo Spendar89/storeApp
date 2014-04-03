@@ -12,7 +12,8 @@ _.extend(Carts, {
 
   getSubtotal: function (cart) {
     return _.reduce(cart.cartProducts, function (sum, cartProduct) {
-      return sum + parseInt(cartProduct.price);
+      var total = parseInt(cartProduct.product.price) * cartProduct.quantity;
+      return sum + total;
     }, 0);
   }
 });

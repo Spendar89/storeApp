@@ -20,6 +20,22 @@ a
   }
 }
 
+.navbar
+  a
+    &.active, &:hover
+      background transparent !important
+    &:hover
+      color grey
+
+.centered {
+  text-align center;
+}
+
+.fit-height {
+  height 100%
+  width auto
+}
+
 .img-cell {
   .img-div {
     width: 80px;
@@ -38,6 +54,19 @@ a
 ul {
   list-style: none;
 }
+
+a.secondary
+  color grey
+  font-family gotham
+  h2
+    font-weight lighter
+
+.inline-block
+  display inline-block
+
+li.active
+  a.secondary
+    background grey !important
 
 
 input:required:invalid, input:focus:invalid {

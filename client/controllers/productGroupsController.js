@@ -1,4 +1,4 @@
-ProductGroupsIndexController = ApplicationController.extend({
+AdminProductGroupsIndexController = ApplicationController.extend({
   layoutTemplate: 'default_layout',
 
   onBeforeAction: function () {
@@ -15,15 +15,10 @@ ProductGroupsIndexController = ApplicationController.extend({
     };
   },
 
-  action: function () {
-    if (this.ready()) {
-      this.render();
-    }
-  },
-
   onAfterAction: function () {
-    var templateName = this.lookupTemplate();
-    Template[templateName].rendered = function () {
+    var that = this;
+    this.defaultTemplate().rendered = function () {
+      that.renderCart();
       React.renderComponent(ProductGroupsBlock({}),
         document.getElementById('productGroupsBlock')
       );

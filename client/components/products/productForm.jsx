@@ -23,7 +23,8 @@ ProductForm = React.createClass({
       productPropertyRules: productPropertyRules,
       product: product,
       isEditing: product._id ? true : false,
-      error: false
+      error: false,
+      sections: ["defaults", "options", "properties", "images"]
     };
   },
 
@@ -58,6 +59,7 @@ ProductForm = React.createClass({
     var product = this.state.product;
     return <ProductImagesInput productGroup={this.state.productGroup}
                                imageIds={this.state.product.imageIds}
+                               product={product}
                                handleUpdate={this.handleImagesUpdate} />
   },
 
@@ -106,6 +108,22 @@ ProductForm = React.createClass({
     }
   },
 
+  changeSection: function (section, event) {
+    this.setState({currentSection: section});
+  },
+
+  renderSectionButton: function (section, i) {
+    var isDefault = !this.state.currentSection && section === "defaults"
+    var isActive = this.state.currentSection === section;
+    var changeSection = this.changeSection.bind(this, section);
+    return (
+      <ProductFormSectionButton active={isActive || isDefault}
+                                section={section}
+                                key={i}
+                                onClick={changeSection}/>
+    )
+  },
+
   render: function () {
     var headerText,
     name = this.state.product.name,
@@ -114,27 +132,34 @@ ProductForm = React.createClass({
     if (this.state.isEditing) {
       headerText = "Edit " + name
     } else {
-      headerText = "Add a New " + name;
+      headerText = "Add a New " + this.state.productGroup.name;
     }
+
+    var currentSection = this.state.currentSection || "defaults";
+    var currentClassName = currentSection + "-section form-section";
+    var currentHeader = currentSection.toUpperCase();
+    var currentRender;
+
+    if (currentSection === "defaults") {
+      currentRender = this.renderDefaultInputs();
+    } else if (currentSection === "options") {
+      currentRender = this.renderOptionsFormGroup();
+    } else if (currentSection === "properties") {
+      currentRender = this.renderPropertiesFormGroup();
+    } else if (currentSection === "images") {
+      currentRender = this.renderImagesInput();
+    }
+
     return (
             <div className="product-form-div">
               <h1> {headerText} </h1>
+              <div className="section-buttons-div">
+                {this.state.sections.map(this.renderSectionButton)}
+              </div>
               <form className="form form-horizontal product-form">
-                <div className="form-section defaults-section">
-                  <h2>Defaults</h2>
-                  {this.renderDefaultInputs()}
-                </div>
-                <div className="form-section options-section">
-                  <h2>Options</h2>
-                  {this.renderOptionsFormGroup()}
-                </div>
-                <div className="form-section properties-section">
-                  <h2>Properties</h2>
-                  {this.renderPropertiesFormGroup()}
-                </div>
-                <div className="form-section images-section">
-                  <h2>Images</h2>
-                  {this.renderImagesInput()}
+                <div className={currentClassName}>
+                  <h2>{currentHeader}</h2>
+                  {currentRender}
                 </div>
               </form>
             </div>

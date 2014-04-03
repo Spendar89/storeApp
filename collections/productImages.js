@@ -1,32 +1,24 @@
 ProductImages = new FS.Collection('productImages', {
-  stores: [new FS.Store.FileSystem("images", {path: "~/uploads"})],
-  autopublish: false,
-   filter: {
+  useHTTP: true,
+  stores: [new FS.Store.FileSystem('productImages')],
+  filter: {
     allow: {
       contentTypes: ['image/*'],
-      extensions: ['png']
+      extensions: ['png', 'jpg', 'jpeg', 'gif']
     }
   }
 });
 
 Helpers.addPermissions(ProductImages);
 
+ProductImages.allow({
+  download: function () {
+    return true;
+  }
+});
+
 ProductImages.getUrls = function (images) {
   return images.map(function (image) {
-    return image.url
+    return image.url();
   });
 };
-
-// if (Meteor.isServer) {
-
-  // var handler = {
-  //   'default': function (options) {
-  //     return {
-  //       blob: options.blob,
-  //       fileRecord: options.fileRecord
-  //     };
-  //   }
-  // };
-
-  // ProductImages.fileHandlers(handler);
-// }

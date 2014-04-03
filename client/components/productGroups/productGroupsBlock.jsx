@@ -37,7 +37,7 @@ ProductGroupsBlock = React.createClass({
               handleEdit: editProductGroup,
               handleRemove: removeProductGroup,
               classString: 'product-group',
-              showPath: '/product_groups/' + productGroup._id + '/products'
+              showPath: '/admin/product_groups/' + productGroup._id + '/products'
             })
           })}
         </ul>

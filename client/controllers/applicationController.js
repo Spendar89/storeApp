@@ -1,6 +1,10 @@
 ApplicationController = RouteController.extend({
+  defaultTemplate: function () {
+    var templateName = this.lookupTemplate();
+    return Template[templateName];
+  },
+
   waitOn: function () {
-    console.log("waiting on defaults");
     return this.subscribe("storeDefaults", "q2dMF25K4Jb3Q3j7Y");
   },
 
@@ -9,9 +13,10 @@ ApplicationController = RouteController.extend({
   },
 
   setUserSession: function () {
-    var user = Meteor.user();
-    Session.set("currentUser", user);
+    currentUser = new User(Meteor.user());
+    Session.set("currentUser", Meteor.user());
     Session.set("currentUserId", Meteor.userId());
+
   },
 
   setDefaultSessions: function () {
@@ -28,7 +33,7 @@ ApplicationController = RouteController.extend({
     }
   },
 
-  setCartSession: function () {
+  setDefaultCartSession: function () {
     this.setFriendCart();
     var cart = Carts.findOne({userId: Meteor.userId()});
     var newCart =  Carts.build(Meteor.userId());
@@ -40,14 +45,34 @@ ApplicationController = RouteController.extend({
     }
   },
 
-  onBeforeAction: function () {
-    if(this.ready()) {
-      console.log("hey im ready");
-      this.setDefaultSessions();
-      this.setCartSession();
+  setCartSession: function (cartId) {
+    if (cartId) {
+      console.log("setting cartId from params");
+      Session.set("cartId", cartId);
     } else {
-      console.log("hey im not ready");
+      console.log("setting cartId from default shat");
+      this.setDefaultCartSession();
     }
+  },
 
+  renderCart: function () {
+    var btnNode = document.getElementById('showCartBtn');
+    var cartNode = document.getElementById('cartBlock');
+    React.renderComponent(ShowCartBtn({}), btnNode);
+    React.renderComponent(CartManager({}), cartNode);
+
+  },
+
+  onBeforeAction: function () {
+    if (this.ready()) {
+      this.setDefaultSessions();
+      this.setCartSession(this.params.cart_id);
+    }
+  },
+
+  action: function () {
+    if (this.ready()) {
+      this.render();
+    }
   }
 });

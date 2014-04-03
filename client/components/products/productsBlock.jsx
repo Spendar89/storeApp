@@ -41,7 +41,7 @@ ProductsBlock = React.createClass({
               handleEdit: editProduct,
               handleRemove: removeProduct,
               classString: 'products',
-              showPath: 'products/' + productId
+              showPath: '/products/' + productId
             })
           })}
         </ul>

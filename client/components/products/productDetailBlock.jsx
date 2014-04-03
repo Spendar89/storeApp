@@ -3,7 +3,7 @@
  */
 
 ProductDetailBlock = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -48,7 +48,40 @@ ProductDetailBlock = React.createClass({
   },
 
   renderAddToCartBtn: function () {
-    return <AddToCartBtn cartProduct={this.state.cartProduct}/>
+    return (
+      <div className="row add-to-cart-div">
+        <div className="col-sm-4">
+          {this.renderQtyInput()}
+        </div>
+        <div className="col-sm-8">
+          <AddToCartBtn cartProduct={this.state.cartProduct}/>
+        </div>
+      </div>
+    )
+  },
+
+  handleQuantityChange: function (e) {
+    var newQuantity = parseInt(e.target.value);
+    console.log("new quantity: " + newQuantity);
+    var cartProductCopy = _.extend({}, this.state.cartProduct);
+    cartProductCopy.quantity = newQuantity;
+    this.setState({cartProduct: cartProductCopy});
+  },
+
+  renderQtyInput: function () {
+    return <input type="number"
+                  value={this.state.cartProduct.quantity}
+                  className="cart-product-qty form-control bordered"
+                  placeholder="Quantity"
+                  onChange={this.handleQuantityChange}/>
+  },
+
+  renderOptionSelects: function () {
+    var that = this;
+    return _.map(this.state.product.options, function(values, key) {
+      return <CartProductOptionSelect optionValues={values}
+                                      key={key}/>
+    })
   },
 
   renderCartProductOptionSelects: function () {
@@ -56,10 +89,7 @@ ProductDetailBlock = React.createClass({
       <div className="product-options-div">
         <h1> Options </h1>
         <dl className="dl-horizontal product-options-div">
-          {_.map(this.state.product.options, function(values, key) {
-            return <CartProductOptionSelect optionValues={values}
-                                            key={key} />
-          })}
+          {this.renderOptionSelects()}
         </dl>
       </div>
     )

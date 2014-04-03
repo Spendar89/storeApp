@@ -42,7 +42,7 @@ ProductPropertyInputs = React.createClass({
 });
 
 ProductPropertyInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -106,7 +106,7 @@ ProductPropertyInput = React.createClass({
 });
 
 ProductDefaultInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     var product = this.props.product;
@@ -135,7 +135,7 @@ ProductDefaultInputs = React.createClass({
 });
 
 ProductDefaultInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -183,18 +183,34 @@ ProductImagesInput = React.createClass({
 
   handleChange: function (e) {
     var that = this;
-    var files = e.target.files;
-    ProductImages.storeFiles(files, {
-      productGroupId: this.props.productGroup._id
-    }, function (file, fileId) {
-      var newImageIds = that.state.imageIds.concat([fileId]);
-      that.setState({imageIds: newImageIds});
-    });
+    FS.Utility.eachFile(e, function (file) {
+      var newFile = new FS.File(file);
+      newFile.attachData(file);
+
+      ProductImages.insert(newFile, function (err, productImage) {
+        var newImageIds = that.state.imageIds.concat([productImage._id]);
+        that.setState({imageIds: newImageIds});
+      });
+
+    })
+  },
+
+  handleReset: function (e) {
+    this.setState({imageIds: []})
+  },
+
+  renderImagePreview: function (imageId, i) {
+    return <ProductImagesBlock key={i}
+                               imageId={imageId}
+                               className="col-sm-3"/>
   },
 
   render: function () {
     return (
       <div className="product-images-input-div">
+        <div className="col-sm-12">
+          {this.state.imageIds.map(this.renderImagePreview)}
+        </div>
         <div className="form-group">
           <label className="col-sm-3 control-label">
             Image:
@@ -204,6 +220,14 @@ ProductImagesInput = React.createClass({
                     className="fileUploader"
                     onChange={this.handleChange}/>
           </div>
+          <div className="col-sm-12">
+            <div className="col-sm-12">
+              <a className="btn btn-danger form-control"
+                 onClick={this.handleReset}>
+                Reset
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -211,7 +235,7 @@ ProductImagesInput = React.createClass({
 });
 
 ProductOptionInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -264,7 +288,7 @@ ProductOptionInputs = React.createClass({
 });
 
 ProductOptionValueInput = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {
@@ -282,6 +306,27 @@ ProductOptionValueInput = React.createClass({
             <input  type="text"
                     className="option-input form-control bordered"
                     valueLink={this.linkState('value')}/>
+
+    )
+  }
+});
+
+ProductFormSectionButton = React.createClass({
+  handleClick: function (e) {
+    e.preventDefault();
+    this.props.onClick();
+    this.setState({active: true})
+  },
+
+  render: function () {
+    var active = this.props.active ? "active" : "";
+    var className = "btn option-input form-control bordered " + active;
+    return (
+      <div className="col-sm-3 section-button">
+        <a className={className} onClick={this.handleClick}>
+          {this.props.section}
+        </a>
+      </div>
 
     )
   }

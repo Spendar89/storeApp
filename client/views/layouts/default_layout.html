@@ -9,12 +9,16 @@
   <div class="nav">
     <div class="navbar" role="navigation">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/product_groups">{{currentStore.name}}</a>
+        <a class="navbar-brand" href="/admin/product_groups">{{currentStore.name}}</a>
       </div>
       <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="/products">Products</a></li>
+          <li><a href="/admin/product_groups">Admin</a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
-           <li class="active" id="showCart"><a href="#">Cart</a></li>
-          {{> loginButtons}} <!-- here -->
+           <li class="active" id="showCartBtn"></li>
+          {{> loginButtons}}
         </ul>
       </div>
     </div>

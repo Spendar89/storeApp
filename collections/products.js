@@ -34,6 +34,12 @@ _.extend(Products, {
     return newProduct;
   },
 
+  getOptionKeys: function (product) {
+    return _.map(product.options, function (values, key) {
+      return key;
+    });
+  },
+
   getImageUrls: function (product) {
     var images = ProductImages.find({_id: {$in: product.imageIds}}).fetch();
     return ProductImages.getUrls(images);
@@ -41,3 +47,13 @@ _.extend(Products, {
 });
 
 Helpers.addPermissions(Products);
+
+Product = function (doc) {
+  this.data = doc;
+};
+
+Product.prototype = {
+  save: function () {
+    return Meteor.call("productsUpsert", this.data)
+  }
+};

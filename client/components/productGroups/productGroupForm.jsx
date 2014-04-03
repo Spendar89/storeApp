@@ -143,7 +143,7 @@ ProductGroupForm = React.createClass({
 });
 
 DefaultInput =  React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     return {

@@ -3,7 +3,7 @@
  */
 
 RuleInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
     var rule = this.props.productPropertyRule;

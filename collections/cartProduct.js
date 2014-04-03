@@ -7,7 +7,8 @@ _.extend(CartProducts, {
       productId: productId,
       product: product,
       options: {},
-      price: product.price
+      quantity: 1,
+      total: product.price
     };
   }
 });

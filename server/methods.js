@@ -59,5 +59,20 @@ Meteor.methods({
     var friendIds = user.friendIds || [];
     user.friendIds = friendIds.concat(friendId);
     return Meteor.users.upsert({_id: user._id}, user);
+  },
+
+  productImagesRemove: function (productImageId) {
+    if (productImageId) {
+      return ProductImages.remove(productImageId);
+    } else {
+      return ProductImages.remove({});
+    }
+  },
+
+  usersUpdate: function (clientUser, callback) {
+    var serverUser = Users.findOne(clientUser._id);
+    var user = _.defaults(serverUser, clientUser);
+    console.log("USER NAME: " + user.name);
+    return Users.update({_id: user._id}, user);
   }
 });

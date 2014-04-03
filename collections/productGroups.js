@@ -42,6 +42,7 @@ _.extend(ProductGroups, {
       return newProductGroup;
     }
   }
+
 });
 
 Helpers.addPermissions(ProductGroups);

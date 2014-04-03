@@ -7,30 +7,54 @@ ProductImagesBlock = React.createClass({
 
   getMeteorState: function () {
     var product = this.props.product || Session.get("product");
+    var imageIds = product && product.imageIds;
     return {
-      images: ProductImages.find({_id: {$in: product.imageIds}}).fetch()
+      images: imageIds && ProductImages.find({_id: {$in: imageIds}}).fetch()
     };
   },
 
   getUrl: function (imgObj) {
-    return imgObj.fileHandler.default.url;
+    return imgObj && imgObj.url && imgObj.url();
+  },
+
+  makePrimaryUrl: function (url) {
+    console.log(url);
+    this.setState({primaryUrl: url});
+  },
+
+  renderThumbnail: function (image, i) {
+    var url = this.getUrl(image);
+    var handleClick = this.makePrimaryUrl.bind(this,url);
+    return (
+      <a onClick={handleClick} key={i} className="other-image col-sm-2">
+        <img src={url} className="fit-height"/>
+      </a>
+    )
   },
 
   renderPrimaryImage: function () {
-    var url = this.getUrl(this.state.images[0]);
+    var primaryUrl = this.state.primaryUrl || this.getUrl(this.state.images[0]);
     return (
             <div className="primary-image-div">
               <div className="primary-image row">
-                <img src={url} className="img primary col-sm-10"/>
+                <img src={primaryUrl} className="img primary col-sm-10"/>
               </div>
               <div className="other-images-div row">
-                <div className="other-image col-sm-2"></div>
-                <div className="other-image col-sm-2"></div>
-                <div className="other-image col-sm-2"></div>
-                <div className="other-image col-sm-2"></div>
+                {_.map(this.state.images, this.renderThumbnail.bind(this))}
               </div>
             </div>
             )
+  },
+
+  renderSingleImage: function () {
+    var image = ProductImages.findOne(this.props.imageId);
+    var url = this.getUrl(image);
+    if (url) {
+      return <img src={url} className={this.props.className} />
+    } else {
+      return <div></div>;
+    }
+
   },
 
   renderIndexImage: function () {
@@ -44,12 +68,14 @@ ProductImagesBlock = React.createClass({
   },
 
   render: function () {
-    if(this.props.imageIndex) {
+    if (this.props.imageId) {
+      return this.renderSingleImage();
+    } else if (this.props.imageIndex) {
       return this.renderIndexImage();
     } else if (this.state.images[0]) {
       return this.renderPrimaryImage();
     } else {
-      return <div>No Image</div>
+      return <div> No Image </div>
     }
   }
 })

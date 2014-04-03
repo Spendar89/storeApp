@@ -3,6 +3,13 @@
  */
 
 CartBlock = React.createClass({
+  mixins: [ReactMeteor.Mixin],
+
+  getMeteorState: function () {
+    return {
+      cartIsOpen: Session.get("cartIsOpen")
+    }
+  },
 
   removeCartProduct: function (index) {
     var cartCopy = _.extend({}, this.props.cart);
@@ -29,20 +36,31 @@ CartBlock = React.createClass({
   },
 
   handleRemove: function () {
+    window.cartyo = this.props.cart;
     Meteor.call("cartsRemove", this.props.cart);
   },
 
   render: function () {
+    var checkoutPath = "/carts/" + this.props.cart._id + "/checkout";
+    var className;
+
+    if (this.state.cartIsOpen) {
+      className = "cart-block-div open"
+    } else {
+      className = "cart-block-div"
+    }
+
     return (
-      <div className="cart-block-div open">
-        <div className="cart-products-div col-sm-7">
+      <div className={className}>
+        <div className="cart-products-div cart-section col-sm-7">
           {this.props.cart.cartProducts.map(this.renderCartProductBlock)}
         </div>
-        <div className="cart-summary-div col-sm-3">
+        <div className="cart-summary-div cart-section col-sm-5">
           <CartSummaryBlock subtotal={this.props.cart.subtotal}
-                            handleRemove={this.handleRemove}/>
+                            handleRemove={this.handleRemove}
+                            checkoutPath={checkoutPath}/>
         </div>
-        <div className="cart-friends-div col-sm-2">
+        <div style={{display:'none'}} className="cart-friends-div col-sm-2">
           <CartFriendsBlock/>
         </div>
       </div>
@@ -57,9 +75,18 @@ CartSummaryBlock = React.createClass({
 
           <h2 className="cart-subtotal col-sm-12"> Subtotal: ${this.props.subtotal}</h2>
 
-          <a className="removeCart btn col-sm-12 btn-danger" onClick={this.props.handleRemove}>
-            <h2>Empty Cart</h2>
-          </a>
+          <h5 className="remove-cart-div col-sm-12">
+            <a className="btn btn-danger form-control"
+               onClick={this.props.handleRemove}>
+              Empty Cart
+            </a>
+          </h5>
+          <h5 className="checkout-div col-sm-12">
+            <a className="btn btn-success form-control"
+               href={this.props.checkoutPath}>
+              Checkout
+            </a>
+          </h5>
 
       </div>
     )
@@ -86,6 +113,33 @@ CartFriendsBlock = React.createClass({
        <h2 className="cart-friends-header"> Friends: </h2>
        {this.state.friends.map(this.renderFriend)}
       </div>
+    )
+
+  }
+})
+
+ShowCartBtn = React.createClass({
+  mixins: [ReactMeteor.Mixin],
+
+  getMeteorState: function () {
+    return {
+      cartIsOpen: Session.get("cartIsOpen")
+    }
+  },
+
+  handleClick: function () {
+    if (this.state.cartIsOpen) {
+      Session.set("cartIsOpen", false);
+    } else {
+      Session.set("cartIsOpen", true);
+    }
+  },
+
+  render: function () {
+    var active = this.state.cartIsOpen ? "active" : null;
+    var className = "show-cart-btn nav-btn " + active;
+    return (
+      <a className={className} onClick={this.handleClick}>Cart</a>
     )
 
   }

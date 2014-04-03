@@ -1,8 +1,7 @@
 Router.map(function () {
-  this.route('productGroupsIndex', {
-    path: 'product_groups',
-    controller: 'ProductGroupsIndexController',
-    layoutTemplate: 'default_layout'
+  this.route('adminProductGroupsIndex', {
+    path: 'admin/product_groups',
+    controller: 'AdminProductGroupsIndexController'
   });
 
   this.route('productGroupShow', {
@@ -11,12 +10,22 @@ Router.map(function () {
   });
 
   this.route('productsIndex', {
-    path: 'product_groups/:_id/products',
+    path: 'products',
     controller: 'ProductsIndexController'
   });
 
+  this.route('adminProductsIndex', {
+    path: 'admin/product_groups/:_id/products',
+    controller: 'AdminProductsIndexController'
+  });
+
   this.route('productShow', {
-    path: 'product_groups/:product_group_id/products/:_id',
+    path: 'products/:_id',
     controller: 'ProductShowController'
+  });
+
+  this.route('cartCheckout', {
+    path: 'carts/:cart_id/checkout',
+    controller: 'CartCheckoutController'
   });
 });

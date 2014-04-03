@@ -3,10 +3,10 @@
  */
 
 CartProductOptionSelect = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    var cartProduct = Session.get("cartProduct")
+    var cartProduct = Session.get("cartProduct");
     return {
       initialValue: cartProduct.options[this.props.key],
       newValue: cartProduct.options[this.props.key]
@@ -34,7 +34,7 @@ CartProductOptionSelect = React.createClass({
     return (
       <div className="row margin-row">
         <div className="col-sm-12">
-          <select required
+          <select required="true"
                   className="form-control bordered"
                   valueLink={this.linkState('newValue')}>
                   <option>{this.props.key}</option>

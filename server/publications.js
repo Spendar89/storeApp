@@ -38,7 +38,11 @@ Meteor.publish("productGroupProducts", function (id) {
 
 Meteor.publish("store_products", function (storeId) {
   if (storeId) {
-    var productGroupIds = ProductGroups.find({storeId: storeId}).map(function (pg) {return pg._id});
+    var productGroupIds = ProductGroups.find({
+      storeId: storeId
+    }).map(function (pg) {
+      return pg._id;
+    });
     return Products.find({productGroupId: {$in: productGroupIds}});
   }
 });
@@ -66,9 +70,27 @@ Meteor.publish("friend_cart", function (friendId) {
 });
 
 Meteor.publish("storeDefaults", function (storeId) {
-  var stores = Stores.find({ _id: storeId });
-  var productGroups = ProductGroups.find({ storeId: storeId });
-  var productImages = ProductImages.find();
-  var userCart = Carts.find({userId: this.userId});
-  return [stores, productGroups, productImages, userCart];
+  var user, userCart;
+
+  var stores = Stores.find({ _id: storeId }),
+    productGroups = ProductGroups.find({ storeId: storeId }),
+    productImages = ProductImages.find(),
+    productGroupIds = productGroups.map(function (pg) {
+      return pg._id;
+    }),
+    products = Products.find({productGroupId: {$in: productGroupIds}});
+
+  if (this.userId) {
+    //publishes all user fields except for createdAt and services
+    user = Meteor.users.find({_id: this.userId},
+                             {fields: {createdAt: 0, services: 0}});
+    userCart = Carts.find({userId: this.userId});
+  }
+
+  return _.compact([stores, productGroups,
+                    productImages, products,
+                    user, userCart]);
 });
+
+
+
