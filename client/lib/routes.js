@@ -24,8 +24,9 @@ Router.map(function () {
     controller: 'ProductShowController'
   });
 
-  this.route('cartCheckout', {
+  this.route('checkout', {
+    //TODO: change path to 'checkout?cart_id=[:cart_id]'
     path: 'carts/:cart_id/checkout',
-    controller: 'CartCheckoutController'
+    controller: 'CheckoutController'
   });
 });

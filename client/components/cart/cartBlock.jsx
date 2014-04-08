@@ -17,6 +17,10 @@ CartBlock = React.createClass({
     Meteor.call("cartsUpsert", cartCopy);
   },
 
+  onClick: function () {
+    alert("yoooo")
+  },
+
   renderCartProductBlock: function (cartProduct, i) {
     var that = this;
     var removeCartProduct = function () {
@@ -51,7 +55,7 @@ CartBlock = React.createClass({
     }
 
     return (
-      <div className={className}>
+      <div className={className} id="#cartBlock">
         <div className="cart-products-div cart-section col-sm-7">
           {this.props.cart.cartProducts.map(this.renderCartProductBlock)}
         </div>

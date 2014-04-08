@@ -71,8 +71,11 @@ Meteor.methods({
 
   usersUpdate: function (clientUser, callback) {
     var serverUser = Users.findOne(clientUser._id);
-    var user = _.defaults(serverUser, clientUser);
-    console.log("USER NAME: " + user.name);
+    var user = _.defaults(clientUser, serverUser);
     return Users.update({_id: user._id}, user);
+  },
+
+  ordersUpsert: function (order, callback) {
+    return Orders.upsert({_id: order._id}, order);
   }
 });

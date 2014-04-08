@@ -2,7 +2,7 @@
  * @jsx React.DOM
  */
 
-CartCheckoutBlock = React.createClass({
+CheckoutBlock = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
@@ -17,7 +17,9 @@ CartCheckoutBlock = React.createClass({
       return <ProductImagesBlock key={i}
                                  imageId={imageId}
                                  className="col-sm-12"/>
-    })
+    });
+
+    var total = (product.price * cartProduct.quantity);
 
     return (
       <li className="cart-product list-item row"
@@ -32,7 +34,7 @@ CartCheckoutBlock = React.createClass({
             <h2>Qty: {cartProduct.quantity}</h2>
           </div>
           <div className="col-sm-3 cart-product-total">
-            <h2>Total: ${cartProduct.product.price * cartProduct.quantity}</h2>
+            <h2>Total: ${total}</h2>
           </div>
       </li>
     )
@@ -43,18 +45,10 @@ CartCheckoutBlock = React.createClass({
       <ul className="cart-products-list col-sm-8 col-sm-offset-2">
         {cartProducts.map(this.renderCartProduct)}
         <li className="cart-product list-item row">
-          <h1> Subtotal: ${cart.subtotal}</h1>
+          <h2 className="form-header"> Subtotal: ${cart.subtotal}</h2>
         </li>
       </ul>
     )
-  },
-
-  renderUserForm: function () {
-    return (
-      <ul className="user-form col-sm-8 col-sm-offset-2">
-        <h2> User Information </h2>
-      </ul>
-     )
   },
 
   render: function () {
@@ -62,10 +56,22 @@ CartCheckoutBlock = React.createClass({
     var cartProducts = cart && cart.cartProducts;
     if (cartProducts) {
       return (
-        <div className="cart-checkout-block">
-          <h1 className="centered">Checkout</h1>
-          {this.renderCartForm(cart, cartProducts)}
-          {this.renderUserForm()}
+        <div className="checkout-block">
+
+          <div className="cart-products-div">
+            <h1 className="centered">Your Cart</h1>
+            <div className="col-sm-12">
+              {this.renderCartForm(cart, cartProducts)}
+            </div>
+          </div>
+
+          <div className="col-sm-10 col-sm-offset-1 order-form-div">
+            <div className="col-sm-12">
+              <h1 className="centered">Order Details</h1>
+              <OrderForm className="col-sm-8 col-sm-offset-2"/>
+            </div>
+          </div>
+
         </div>
       )
     } else {

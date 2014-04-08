@@ -53,7 +53,7 @@ Meteor.publish("all_product_images", function () {
 
 Meteor.publish("friends", function (friendIds) {
   if (this.userId) {
-    return Users.find({_id: {$in: friendIds.concat([this.userId])}})
+    return Users.find({_id: {$in: friendIds.concat([this.userId])}});
   }
 });
 
@@ -85,11 +85,12 @@ Meteor.publish("storeDefaults", function (storeId) {
     user = Meteor.users.find({_id: this.userId},
                              {fields: {createdAt: 0, services: 0}});
     userCart = Carts.find({userId: this.userId});
+    userOrders = Orders.find({userId: this.userId});
   }
 
   return _.compact([stores, productGroups,
                     productImages, products,
-                    user, userCart]);
+                    user, userCart, userOrders]);
 });
 
 

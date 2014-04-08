@@ -36,6 +36,13 @@ AdminProductsIndexController = ApplicationController.extend({
                             document.getElementById('productGroupBlock'));
       React.renderComponent(ProductForm({}),
                             document.getElementById('productForm'));
+
+      $('#cartBlock').affix({
+        offset: {
+          top: $('#navbar').height()
+        }
+      });
+
     }.bind(this);
   }
 });

@@ -8,16 +8,15 @@ User = function (doc) {
 
 User.prototype = {
   set: function (key, value) {
+    //TODO: whitelist attributes that can be set;
     this.data[key] = value;
     return this.data[key];
   },
+
   save: function () {
-    return Meteor.call("usersUpdate", this.data, function (err, num) {
-      if (err) {
-        // there was an error
-      } else {
-        return this.data;
-      }
-    });
+    var afterSave = function (err, num) {
+      return err || this.data;
+    };
+    return Meteor.call("usersUpdate", this.data, afterSave);
   }
 };

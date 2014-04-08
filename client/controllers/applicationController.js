@@ -13,10 +13,8 @@ ApplicationController = RouteController.extend({
   },
 
   setUserSession: function () {
-    currentUser = new User(Meteor.user());
+    StoreApp.currentUser = new User(Meteor.user());
     Session.set("currentUser", Meteor.user());
-    Session.set("currentUserId", Meteor.userId());
-
   },
 
   setDefaultSessions: function () {
@@ -45,6 +43,15 @@ ApplicationController = RouteController.extend({
     }
   },
 
+  setOrderSession: function () {
+    console.log("Setting order!!");
+    var doc = Orders.findOne({cartId: Session.get("cartId")});
+    var order = new Order(doc);
+    StoreApp.currentOrder = order;
+    Session.set("order", order);
+
+  },
+
   setCartSession: function (cartId) {
     if (cartId) {
       console.log("setting cartId from params");
@@ -67,6 +74,7 @@ ApplicationController = RouteController.extend({
     if (this.ready()) {
       this.setDefaultSessions();
       this.setCartSession(this.params.cart_id);
+      this.setOrderSession();
     }
   },
 
