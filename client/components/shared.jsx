@@ -35,3 +35,33 @@ BlockRow = React.createClass({
     );
   }
 });
+
+DefaultFormMixin = {
+
+  renderInput: function (key, i) {
+    return (
+      <div key={i} className="form-group">
+        <label className="control-label col-sm-2">
+          {Util.unCamel(key)}
+        </label>
+        <div className="col-sm-10">
+          <input className="form-control"
+                 placeholder={Util.unCamel(key)}
+                 valueLink={this.linkState(key)}/>
+        </div>
+      </div>
+    )
+  },
+
+  renderInputs: function () {
+    return (
+      <div className="address-inputs">
+        <h3 className="form-header">
+          {this.props.header}
+        </h3>
+        {this.props.keys.map(this.renderInput)}
+      </div>
+    )
+  }
+};
+

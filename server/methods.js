@@ -39,7 +39,6 @@ Meteor.methods({
 
   cartsUpsert: function (cart, callback) {
     if (this.userId) {
-      cart.subtotal = Carts.getSubtotal(cart);
       return Carts.upsert({_id: cart._id}, cart);
     }
   },
@@ -77,5 +76,65 @@ Meteor.methods({
 
   ordersUpsert: function (order, callback) {
     return Orders.upsert({_id: order._id}, order);
+  },
+
+  ordersRemove: function (orderId) {
+    if (orderId) {
+      return Orders.remove(orderId);
+    } else {
+      return Orders.remove({});
+    }
+  },
+
+  stripeChargesCreate: function (paymentState) {
+    Stripe.charges.create({
+      amount: paymentState.orderTotal,
+      currency: "USD",
+      card: paymentState.payments.token
+    }, function (err, res) {
+      console.log(err, res);
+    });
+  },
+
+  stripeCustomersCreate: function (user, token) {
+    console.log("CREATING STRIPE CUSTOMER!!");
+    var createdCustomer = _StripeCustomers.create({ card: token });
+    console.log("CREATING STRIPE CUSTOMER: created customer: " + JSON.stringify(createdCustomer));
+    return Meteor.call("usersUpdateStripeCustomer", user, createdCustomer);
+  },
+
+  stripeCustomersCreateCard: function (user, token) {
+    var stripeCustomer = user.stripeCustomer;
+    if (stripeCustomer) {
+      _StripeCustomers.createCard(stripeCustomer.id, {card: token});
+      return Meteor.call("usersUpdateStripeCustomer", user);
+    } else {
+      return Meteor.call("stripeCustomersCreate", user, token);
+    }
+  },
+
+  stripeCustomersDeleteCard: function (user, index) {
+    var stripeCustomerId = user.stripeCustomer.id;
+    var cardId = user.stripeCustomer.cards.data[index].id;
+    _StripeCustomers.deleteCard(stripeCustomerId, cardId);
+    Meteor.call("usersUpdateStripeCustomer", user);
+  },
+
+  stripeCustomersRetrieve: function (stripeCustomerId) {
+    return _StripeCustomers.retrieve(stripeCustomerId);
+  },
+
+  stripeCustomersDelete: function (user) {
+    _StripeCustomers.del(user.stripeCustomer.id);
+    Meteor.call("usersUpdateStripeCustomer", user);
+  },
+
+  usersUpdateStripeCustomer: function (user, _stripeCustomer) {
+    console.log("USERS UPDATE STRIPE CUSTOM!!");
+    var stripeCustomer = _stripeCustomer || Meteor.call("stripeCustomersRetrieve", user.stripeCustomer.id);
+    console.log(stripeCustomer);
+    if (!stripeCustomer.id || stripeCustomer.deleted) stripeCustomer = null;
+    return Users.update({ _id: user._id }, { $set: { stripeCustomer: stripeCustomer } });
   }
+
 });

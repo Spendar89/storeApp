@@ -44,22 +44,15 @@ ApplicationController = RouteController.extend({
   },
 
   setOrderSession: function () {
-    console.log("Setting order!!");
-    var doc = Orders.findOne({cartId: Session.get("cartId")});
-    var order = new Order(doc);
+    var orderDoc = Orders.findOne({cartId: Session.get("cartId")});
+    var order = new Order(orderDoc);
+    if (!order.data) order.setDefault();
     StoreApp.currentOrder = order;
     Session.set("order", order);
-
   },
 
   setCartSession: function (cartId) {
-    if (cartId) {
-      console.log("setting cartId from params");
-      Session.set("cartId", cartId);
-    } else {
-      console.log("setting cartId from default shat");
-      this.setDefaultCartSession();
-    }
+    cartId ? Session.set("cartId", cartId) : this.setDefaultCartSession();
   },
 
   renderCart: function () {
@@ -73,6 +66,8 @@ ApplicationController = RouteController.extend({
   onBeforeAction: function () {
     if (this.ready()) {
       this.setDefaultSessions();
+
+      // means its checkout since cart_id is in
       this.setCartSession(this.params.cart_id);
       this.setOrderSession();
     }

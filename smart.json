@@ -6,6 +6,9 @@
     "autoform": {},
     "collectionFS": {},
     "cfs-filesystem": {},
-    "accounts-ui-bootstrap-3-blaze": {}
+    "accounts-ui-bootstrap-3-blaze": {},
+    "stripe": {},
+    "collection-hooks": {},
+    "npm": {}
   }
 }

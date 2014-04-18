@@ -15,3 +15,6 @@ cfs-public-folder
 react
 cfs-filesystem
 accounts-ui-bootstrap-3-blaze
+stripe
+collection-hooks
+npm

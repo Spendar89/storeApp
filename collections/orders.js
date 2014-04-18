@@ -7,6 +7,13 @@ Order = function (doc) {
 
 Helpers.addPermissions(Orders);
 
+Orders.after.update(function (userId, order) {
+  if (!order.active) {
+    Carts.update({ _id: order.cartId}, { active: false });
+  }
+
+});
+
 Order.prototype = {
   set: function (key, value) {
     //TODO: whitelist attributes that can be set;
@@ -14,19 +21,21 @@ Order.prototype = {
     return this.data[key];
   },
 
-  setDefault: function (user, cart) {
+  setDefault: function () {
+    var user = Meteor.user();
     this.data = {
-      cartId: cart._id,
+      cartId: Session.get("cartId"),
       userId: user._id,
       firstName: user.firstName || "",
       lastName: user.lastName || "",
       address: {
-        houseNumber: null,
-        street: null,
-        city: null,
-        state: null,
-        zipcode: null
+        houseNumber: "default number",
+        street: "default street",
+        city: "default city",
+        state: "default state",
+        zipcode: "default zipcode"
       },
+      tax: 0,
       active: true,
       status: "checkout",
       shipping: {},
@@ -43,5 +52,15 @@ Order.prototype = {
       return err || success;
     };
     return Meteor.call("ordersUpsert", this.data, afterSave);
+  },
+
+  getCart: function () {
+    var cartId = this.data.cartId;
+    return Carts.findOne(cartId);
+  },
+
+  getTotal: function () {
+    var cart = this.getCart();
+    return cart.total || cart.subtotal;
   }
 };

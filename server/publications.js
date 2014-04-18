@@ -84,13 +84,15 @@ Meteor.publish("storeDefaults", function (storeId) {
     //publishes all user fields except for createdAt and services
     user = Meteor.users.find({_id: this.userId},
                              {fields: {createdAt: 0, services: 0}});
-    userCart = Carts.find({userId: this.userId});
+
+    userCart = Carts.find({userId: this.userId, active: true});
     userOrders = Orders.find({userId: this.userId});
+
   }
 
   return _.compact([stores, productGroups,
                     productImages, products,
-                    user, userCart, userOrders]);
+                    user, userOrders, userCart]);
 });
 
 

@@ -13,4 +13,4 @@ _.extend(CartProducts, {
   }
 });
 
-Helpers.addPermissions(Carts);
+Helpers.addPermissions(CartProducts);

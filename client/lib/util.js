@@ -10,7 +10,26 @@ Util = {
       if (v) { a[k] = v; }
       return a;
     }, {});
-  }
+  },
 
+  repeatChar: function (n, uni) {
+    var s = "";
+    _.times(n, function () {
+      s += String.fromCharCode(uni);
+    });
+    return s;
+  },
+
+  hiddenCard: function (lastFour) {
+    var g = this.repeatChar(4, 9679) + " ";
+    return g + g + g + lastFour;
+  },
+
+  unCamel: function (s) {
+    return s.replace(/([A-Z])/g, ' $1')
+      .replace(/^./, function (str) {
+        return str.toUpperCase();
+      });
+  }
 
 };
