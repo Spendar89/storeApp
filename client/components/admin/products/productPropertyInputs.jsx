@@ -4,36 +4,23 @@
 
 ProductPropertyInputs = React.createClass({
 
-  getInitialState: function () {
-    return {
-      properties: this.props.properties,
-      productGroup: this.props.productGroup
-    };
-  },
-
-  renderPropertyInput: function (propertyRule, i) {
-    var property = this.state.properties[propertyRule.name];
-    var propertyValue = property && property.value;
-    return <ProductPropertyInput  handleUpdate={this.handlePropertyUpdate}
+  renderPropertyInput: function (productPropertyRule, i) {
+    var property = this.props.properties[productPropertyRule.name] || {};
+    property.name = productPropertyRule.name;
+    return <ProductPropertyInput  handleUpdate={this.props.handleUpdate}
                                   property={property}
-                                  propertyRule={propertyRule}
+                                  productPropertyRule={productPropertyRule}
                                   key={i} />
-  },
-
-  handlePropertyUpdate: function (property) {
-    var properties = _.extend({}, this.state.properties);
-    properties[property.name] = property;
-    this.props.handleUpdate(properties);
   },
 
   handleReset: function () {
     //change to props.reset
     Session.set("editProduct", null);
-    Session.set("newProduct", getNewProduct(Session.get("productGroup")));
+    Session.set("newProduct", Products.getNewProduct(Session.get("productGroup")));
   },
 
   render: function () {
-    var productGroup = this.state.productGroup;
+    var productGroup = this.props.productGroup;
     var productPropertyRules = productGroup && productGroup.productPropertyRules;
     return (
       <div>

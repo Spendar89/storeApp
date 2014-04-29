@@ -6,7 +6,7 @@ ProductPropertyInput = React.createClass({
   mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    return _.extend({}, this.props.property);
+    return this.props.property;
   },
 
   componentDidUpdate: function () {
@@ -25,27 +25,26 @@ ProductPropertyInput = React.createClass({
     return (
       <select className="form-control bordered"
               valueLink={this.linkState('value')}>
-        {this.props.propertyRule.allowedValues.map(allowedOption)}
+        {this.props.productPropertyRule.allowedValues.map(allowedOption)}
       </select>
     )
   },
 
   renderOpenInput: function () {
     return (
-      <input  type={this.props.propertyRule.kind}
+      <input  type={this.props.productPropertyRule.kind}
               className="form-control bordered"
               valueLink={this.linkState('value')}/>
     )
   },
 
   render: function () {
-    var inputBlock;
-    var allowedValues = this.props.allowedValues;
+    var allowedValues = this.props.productPropertyRule.allowedValues;
 
-    if (allowedValues && allowedValues.length > 0 && allowedValues[0].length > 0) {
-      inputBlock = this.renderAllowedInput();
+    if (_.any(allowedValues)) {
+      var inputBlock = this.renderAllowedInput();
     } else {
-      inputBlock = this.renderOpenInput();
+      var inputBlock = this.renderOpenInput();
     }
 
     return (

@@ -16,6 +16,7 @@ AdminProductsBlock = React.createClass({
 
   handleEdit: function (i) {
     var product = this.state.products[i];
+    Session.set("newProduct", null);
     Session.set("editProduct", product);
   },
 

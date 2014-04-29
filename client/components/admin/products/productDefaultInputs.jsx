@@ -6,7 +6,7 @@ ProductDefaultInputs = React.createClass({
   mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    var product = this.props.product;
+    var product = Session.get("editProduct") || Session.get("newProduct");
     var inputs = this.props.defaultKeys.map(function (defaultKey) {
       return {label: defaultKey, value: product[defaultKey]}
     })

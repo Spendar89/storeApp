@@ -12,7 +12,7 @@ AdminProductForm = React.createClass({
     };
   },
 
-  renderPropertiesFormGroup: function () {
+  renderPropertyInputs: function () {
     var allRules = this.state.productGroup.productPropertyRules;
     var productPropertyRules = _.filter(allRules, function (rule) {
       return rule.kind != 'option';
@@ -75,9 +75,9 @@ AdminProductForm = React.createClass({
     this.updateProduct(productCopy)
   },
 
-  handlePropertiesUpdate: function (properties) {
+  handlePropertiesUpdate: function (property) {
     var productCopy = _.extend({}, this.state.product);
-    productCopy.properties = properties;
+    productCopy.properties[property.name] = property;
     this.updateProduct(productCopy)
   },
 
@@ -101,10 +101,12 @@ AdminProductForm = React.createClass({
     var sections = {
       defaults: this.renderDefaultInputs,
       options: this.renderOptionsFormGroup,
-      properties: this.renderPropertiesFormGroup,
+      properties: this.renderPropertyInputs,
       images: this.renderImagesInput
     };
     var newSection = sections[sectionName];
+    // TODO: don't set currentSection on state directly...
+    // Add method renderCurrentSection based on section name
     if (newSection) {
       this.setState({currentSection: newSection(),
                      currentSectionName: sectionName});
@@ -112,9 +114,6 @@ AdminProductForm = React.createClass({
   },
 
   renderSectionButton: function (sectionName, i) {
-    var isDefault = !this.state.currentSectionName && sectionName === "defaults"
-    var isActive = this.state.currentSectionName === sectionName;
-    var changeSection = this.changeSection.bind(this, sectionName);
     return (
       <ProductFormSectionButton sectionName={sectionName}
                                 key={i}
@@ -134,15 +133,6 @@ AdminProductForm = React.createClass({
         </div>
       </div>
     )
-  },
-
-  renderSectionMap: function () {
-    return {
-      defaults: this.renderDefaultInputs,
-      options: this.renderOptionsFormGroup,
-      properties: this.renderPropertiesFormGroup,
-      images: this.renderImagesInput
-    }
   },
 
   render: function () {

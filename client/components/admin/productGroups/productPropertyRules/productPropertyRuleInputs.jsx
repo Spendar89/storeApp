@@ -2,6 +2,9 @@
  * @jsx React.DOM
  */
 
+// Parent: productGroupForm
+// Children: productPropertyRuleInput
+
 ProductPropertyRulesInputs = React.createClass({
 
   renderProductPropertyRuleInput: function (productPropertyRule, index) {
@@ -11,11 +14,11 @@ ProductPropertyRulesInputs = React.createClass({
   },
 
   handleChange: function (index, newRule, removeValue) {
-    var rulesCopy = _.clone(this.props.productPropertyRules);
+    var rulesCopy = _.extend({}, this.props.productPropertyRules);
     if (rulesCopy[index] && removeValue) {
       rulesCopy.splice(index, 1);
     } else {
-      rulesCopy[index] = newRule
+      rulesCopy[index] = newRule;
     }
     this.props.handleChange('productPropertyRules', rulesCopy);
   },
