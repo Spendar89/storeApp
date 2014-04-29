@@ -4,9 +4,14 @@ Router.map(function () {
     controller: 'AdminProductGroupsIndexController'
   });
 
-  this.route('productGroupShow', {
-    path: 'product_groups/:_id',
-    controller: 'ProductGroupsShowController'
+  this.route('adminProductsIndex', {
+    path: 'admin/product_groups/:_id/products',
+    controller: 'AdminProductsIndexController'
+  });
+
+  this.route('adminOrdersIndex', {
+    path: 'admin/orders',
+    controller: 'AdminOrdersIndexController'
   });
 
   this.route('productsIndex', {
@@ -14,19 +19,20 @@ Router.map(function () {
     controller: 'ProductsIndexController'
   });
 
-  this.route('adminProductsIndex', {
-    path: 'admin/product_groups/:_id/products',
-    controller: 'AdminProductsIndexController'
-  });
-
   this.route('productShow', {
     path: 'products/:_id',
     controller: 'ProductShowController'
   });
 
-  this.route('checkout', {
+  this.route('cartCheckout', {
     //TODO: change path to 'checkout?cart_id=[:cart_id]'
     path: 'carts/:cart_id/checkout',
-    controller: 'CheckoutController'
+    controller: 'CartCheckoutController'
   });
+
+  // this.route('cartConfirmation', {
+  //   //TODO: change path to 'checkout?cart_id=[:cart_id]'
+  //   path: 'carts/:cart_id/confirmation',
+  //   controller: 'CartConfirmationController'
+  // });
 });

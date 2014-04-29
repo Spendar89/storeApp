@@ -69,6 +69,22 @@ Meteor.publish("friend_cart", function (friendId) {
   }
 });
 
+Meteor.publish("checkoutCartOrder", function (cartId) {
+  if (cartId) {
+    var cart = Carts.find({_id: cartId});
+    var order = Orders.find({cartId: cartId}, {limit: 1});
+    return [cart, order];
+  }
+});
+
+Meteor.publish("activeCartOrder", function () {
+  if (this.userId) {
+    var cart = Carts.find({userId: this.userId, active: true}, {limit: 1});
+    var order = Orders.find({userId: this.userId, active: true}, {limit: 1});
+    return _.compact([cart, order]);
+  }
+});
+
 Meteor.publish("storeDefaults", function (storeId) {
   var user, userCart;
 
@@ -84,15 +100,31 @@ Meteor.publish("storeDefaults", function (storeId) {
     //publishes all user fields except for createdAt and services
     user = Meteor.users.find({_id: this.userId},
                              {fields: {createdAt: 0, services: 0}});
-
-    userCart = Carts.find({userId: this.userId, active: true});
-    userOrders = Orders.find({userId: this.userId});
-
   }
 
   return _.compact([stores, productGroups,
                     productImages, products,
-                    user, userOrders, userCart]);
+                    user]);
+});
+
+Meteor.publish("adminOrders", function (storeId) {
+  return Orders.find();
+});
+
+Meteor.publish("adminDefaults", function (storeId) {
+  var user, userCart;
+
+  var stores = Stores.find({ _id: storeId });
+  var productImages = ProductImages.find();
+  var carts = Carts.find();
+
+  if (this.userId) {
+    //publishes all user fields except for createdAt and services
+    user = Meteor.users.find({_id: this.userId},
+                             {fields: {createdAt: 0, services: 0}});
+  }
+
+  return _.compact([stores, productImages, user, carts]);
 });
 
 

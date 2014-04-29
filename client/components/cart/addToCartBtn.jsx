@@ -13,7 +13,7 @@ AddToCartBtn = React.createClass({
 
   handleClick: function () {
     var invalidOptions = this.invalidOptions();
-    var optionsAreValid = !_.any(invalidOptions)
+    var optionsAreValid = !_.any(invalidOptions);
 
     if (optionsAreValid) {
       var cartCopy = _.extend({}, this.state.cart);
@@ -59,6 +59,7 @@ AddToCartBtn = React.createClass({
     } else {
       Session.set("newCart", cartCopy);
     }
+    Session.set("cartIsOpen", true);
   },
 
   afterSave: function (error, success) {

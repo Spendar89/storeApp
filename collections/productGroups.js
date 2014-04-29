@@ -19,14 +19,13 @@ _.extend(ProductGroups, {
     });
   },
 
-  getNewProductPropertyRule: function () {
-    var newProductPropertyRule = {
-      name: "",
-      kind: "",
-      allowedValues: []
-    };
-    return newProductPropertyRule;
-  },
+  // buildProductPropertyRule: function () {
+  //   return {
+  //     name: null,
+  //     kind: "text",
+  //     allowedValues: []
+  //   };
+  // },
 
   getNewProductGroup: function (store) {
     if (store) {
@@ -37,8 +36,8 @@ _.extend(ProductGroups, {
         storeId: store._id,
         productPropertyRules: []
       };
-      newProductGroup.productPropertyRules
-        .push(this.getNewProductPropertyRule());
+      // newProductGroup.productPropertyRules
+      //   .push(this.getNewProductPropertyRule());
       return newProductGroup;
     }
   }

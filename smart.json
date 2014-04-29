@@ -9,6 +9,7 @@
     "accounts-ui-bootstrap-3-blaze": {},
     "stripe": {},
     "collection-hooks": {},
-    "npm": {}
+    "npm": {},
+    "iron-router-progress": {}
   }
 }

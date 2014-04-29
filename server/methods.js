@@ -75,7 +75,9 @@ Meteor.methods({
   },
 
   ordersUpsert: function (order, callback) {
-    return Orders.upsert({_id: order._id}, order);
+    if (this.userId && order.cartId) {
+      return Orders.upsert({_id: order._id}, order);
+    }
   },
 
   ordersRemove: function (orderId) {
@@ -86,14 +88,21 @@ Meteor.methods({
     }
   },
 
-  stripeChargesCreate: function (paymentState) {
-    Stripe.charges.create({
-      amount: paymentState.orderTotal,
+  stripeChargesCreate: function (amount, customerId, orderId) {
+    var charge = _StripeCharges.create({
+      amount: amount,
       currency: "USD",
-      card: paymentState.payments.token
-    }, function (err, res) {
-      console.log(err, res);
+      customer: customerId
     });
+    if (!charge.id) return charge;
+    var order = {active: false, status: "paid", payment: {
+      method: "stripe",
+      chargeId: charge.id,
+      amount: amount
+    }};
+    console.log("Charge successful!");
+    console.log(charge);
+    return Orders.update({_id: orderId}, {$set: order});
   },
 
   stripeCustomersCreate: function (user, token) {
@@ -135,6 +144,15 @@ Meteor.methods({
     console.log(stripeCustomer);
     if (!stripeCustomer.id || stripeCustomer.deleted) stripeCustomer = null;
     return Users.update({ _id: user._id }, { $set: { stripeCustomer: stripeCustomer } });
+  },
+
+  productPropertyRulesUpsert: function (rule, callback) {
+    console.log("UPSERTING: " + JSON.stringify(rule));
+    return ProductPropertyRules.upsert({_id: rule._id}, rule);
+  },
+
+  productPropertyRulesRemove: function (ProductPropertyRule) {
+    return ProductPropertyRules.remove(ProductPropertyRule._id);
   }
 
 });

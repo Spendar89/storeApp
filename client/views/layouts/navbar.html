@@ -1,0 +1,22 @@
+<template name="navbar">
+  <div class="nav">
+    <div class="above-nav row">
+      <ul class="nav navbar-nav navbar-right">
+        <li id="showCartBtn"></li>
+        {{> loginButtons}}
+      </ul>
+    </div>
+    <div class="above-nav row">
+      <a class="above-nav-logo centered" href="/admin/products">mF NYC.</a>
+    </div>
+    <div class="navbar centered-navbar" role="navigation" id="navbar">
+      <ul class="nav navbar-nav navbar-center">
+        <li><a href="/products">Products</a></li>
+        <li><a href="/admin/product_groups">About</a></li>
+        <li><a href="/admin/product_groups">Location</a></li>
+        <li><a href="/admin/product_groups">Admin</a></li>
+      </ul>
+    </div>
+    <section id="cartBlock"></section>
+  </div>
+</template>

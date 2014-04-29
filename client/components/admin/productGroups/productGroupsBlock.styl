@@ -1,0 +1,24 @@
+@import '../../../styles/colors.import'
+
+#productGroupsBlock {
+  .product-groups-list {
+    ul {
+      li {
+        list-style: none;
+      }
+      .product-group-row {
+        padding: 2%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-bottom: none;
+        &.last-true {
+          border-bottom: 1px solid #ccc;
+        }
+        &.editing-true {
+          background: #ccc;
+          // color: white;
+        }
+      }
+    }
+  }
+}

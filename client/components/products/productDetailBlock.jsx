@@ -27,7 +27,7 @@ ProductDetailBlock = React.createClass({
   renderProperty: function (property, propertyName) {
     if (property.value) {
       return (
-        <div>
+        <div key={propertyName}>
           <dt>{propertyName}</dt>
           <dd>{property.value}</dd>
         </div>

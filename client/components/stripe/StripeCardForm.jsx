@@ -6,10 +6,9 @@ StripeCardForm = React.createClass({
   mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    var currentUser = StoreApp.currentUser;
-    var name = currentUser.fullName();
+    var name = StoreApp.currentUser.fullName();
     //also add option for order address
-    var address = currentUser.data.address;
+    var address = Session.get("order").address;
     return {
       number: null,
       cvc: null,
@@ -22,7 +21,7 @@ StripeCardForm = React.createClass({
       address_state: address.state,
       address_zip: address.zipcode,
       address_country: "United States",
-      useUserAddress: true
+      useOrderAddress: true
     };
   },
 
@@ -82,7 +81,7 @@ StripeCardForm = React.createClass({
   },
 
   renderAddressInputs: function () {
-    if (!this.state.useUserAddress) {
+    if (!this.state.useOrderAddress) {
       return (
         <div className="address-inputs-div">
           {this.renderInput('name', 'Cardholder Name')}
@@ -108,10 +107,10 @@ StripeCardForm = React.createClass({
   },
 
   toggleAddress: function () {
-    if (this.state.useUserAddress) {
-      this.setState({useUserAddress: false});
+    if (this.state.useOrderAddress) {
+      this.setState({useOrderAddress: false});
     } else {
-      this.setState({useUserAddress: true});
+      this.setState({useOrderAddress: true});
     }
   },
 
@@ -119,11 +118,11 @@ StripeCardForm = React.createClass({
     return (
       <div className="form-group">
         <label className="control-label col-sm-6">
-          Use Your Address as Billing Address
+          Use Order Address as Billing Address
         </label>
         <div className="col-sm-2">
          <input type="checkbox"
-                checked={this.state.useUserAddress}
+                checked={this.state.useOrderAddress}
                 onChange={this.toggleAddress}/>
         </div>
       </div>

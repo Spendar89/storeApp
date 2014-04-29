@@ -1,0 +1,11 @@
+<template name="admin_layout">
+  <div class="admin-layout master-layout">
+    {{> admin_navbar}}
+    <section class="wrap">
+      <div class="container admin-container">
+        {{> yield }}
+      </div>
+
+    </section>
+  </div>
+</template>

@@ -40,7 +40,7 @@ ProductImagesBlock = React.createClass({
                 <img src={primaryUrl} className="img primary col-sm-10"/>
               </div>
               <div className="other-images-div row">
-                {_.map(this.state.images, this.renderThumbnail.bind(this))}
+                {_.map(this.state.images, this.renderThumbnail)}
               </div>
             </div>
             )

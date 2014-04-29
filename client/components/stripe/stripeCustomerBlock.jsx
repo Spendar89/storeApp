@@ -2,75 +2,45 @@
  * @jsx React.DOM
  */
 
-
-StripeCustomerCardBlock = React.createClass({
-
-  deleteCard: function () {
-    var stripeCustomer = this.props.stripeCustomer;
-    Meteor.call("stripeCustomersDeleteCard", Meteor.user(), this.props.key);
-  },
-
-  render: function () {
-    var card = this.props.card;
-    var cardNumber = Util.hiddenCard(card.last4);
-    return (
-      <div className="form-group saved-payment">
-        <div className="card-number col-sm-12">
-          {cardNumber}
-        </div>
-        <div className="col-sm-12 remove-card-div">
-          <a className=" remove-card"
-             onClick={this.deleteCard}>
-            Use a Different Card
-          </a>
-        </div>
-      </div>
-    )
-  }
-});
-
-ChargeStripeBtn = React.createClass({
-  render: function () {
-    return (
-      <div className="stripe-charges-btn-div margin-top">
-        <div className="col-sm-12">
-          <a  className="btn btn-success form-control"
-              onClick={this.props.onClick}>
-            Charge ${this.props.orderTotal} to Card
-          </a>
-        </div>
-      </div>
-    )
-  }
-});
-
 StripeCustomerBlock = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
     return {
-      user: Meteor.user(),
-      stripeCustomer: Session.get("stripeCustomer"),
-      orderTotal: StoreApp.currentOrder.getTotal(),
+      orderTotal: Session.get("cart").total,
       showForm: false
     }
   },
 
   deleteCustomer: function () {
-    var stripeCustomerId = this.state.stripeCustomer.id;
-    Meteor.call("stripeCustomersDelete", Meteor.user())
+    var stripeCustomerId = this.props.stripeCustomer.id;
+    Meteor.call("stripeCustomersDelete", this.props.user)
+  },
+
+  afterCharge: function (err, res) {
+    if (res) {
+      console.log("charge success.")
+      console.log(res);
+    } else {
+      console.log("charge fail.")
+      console.log(err);
+    }
+
   },
 
   handleCharge: function () {
-    // console.log("handling charge: " + JSON.stringify(this.state));
-    // var card = this.state.payments.stripe.cards.data[0]
-    // Meteor.call("stripeChargesCreate", this.state);
+    Meteor.call("stripeChargesCreate", this.state.orderTotal,
+      this.props.stripeCustomer.id,
+      this.props.order._id,
+      this.afterCharge
+    );
   },
 
   renderCard: function (card, i) {
-    return <StripeCustomerCardBlock key={i}
-                                    card={card}
-                                    stripeCustomer={this.state.stripeCustomer} />
+    return <StripeCardBlock key={i}
+                            card={card}
+                            order={this.props.order}
+                            stripeCustomer={this.props.stripeCustomer} />
   },
 
   toggleForm: function () {
@@ -78,23 +48,30 @@ StripeCustomerBlock = React.createClass({
     this.setState({showForm: !this.state.showForm});
   },
 
+  renderChargeStripeBtn: function () {
+    if (this.props.order.active) {
+      return <StripeCardChargeBtn onClick={this.handleCharge}
+                                  orderTotal={this.state.orderTotal} />
+    }
+
+  },
+
   renderCards: function (customerCards) {
     return  (
-      <div className="stripe-customer-block col-sm-12">
+      <div className="stripe-customer-block">
         <h3 className="form-header">
           Payment:
         </h3>
-        <div className="stripe-customer-cards-block col-sm-12">
+        <div className="stripe-customer-cards-block row">
           {customerCards.map(this.renderCard)}
-          <ChargeStripeBtn onClick={this.handleCharge}
-                           orderTotal={this.state.orderTotal} />
+          {this.renderChargeStripeBtn()}
         </div>
       </div>
     )
   },
 
   render: function () {
-    var stripeCustomer = this.state.stripeCustomer;
+    var stripeCustomer = this.props.stripeCustomer;
     var customerCards = stripeCustomer && stripeCustomer.cards.data;
 
     if (_.any(customerCards)) {

@@ -1,16 +1,17 @@
 Products = new Meteor.Collection("products");
 
+// TODO: Add hook before remove to determine whetehr or not any cartProducts have product
 _.extend(Products, {
   getNewProduct: function (pg) {
     var productGroup = pg || Session.get("productGroup");
     var propertyRules = productGroup.productPropertyRules;
 
     var newProduct = {
-      name: "",
+      name: null,
       price: 0,
-      slug: "",
-      headline: "",
-      description: "",
+      slug: null,
+      headline: null,
+      description: null,
       imageIds: [],
       productGroupId: productGroup._id,
       properties: {},
@@ -26,7 +27,7 @@ _.extend(Products, {
           productPropertyRule: rule,
           name: name,
           index: i,
-          value: ""
+          value: null
         };
       }
 
@@ -47,13 +48,3 @@ _.extend(Products, {
 });
 
 Helpers.addPermissions(Products);
-
-Product = function (doc) {
-  this.data = doc;
-};
-
-Product.prototype = {
-  save: function () {
-    return Meteor.call("productsUpsert", this.data)
-  }
-};

@@ -13,11 +13,11 @@ CartProductOptionSelect = React.createClass({
     };
   },
 
-  componentDidUpdate: function () {
-    if (this.state.newValue != this.state.initialValue) {
-      var cartProductCopy = _.extend({}, Session.get("cartProduct"));
-      cartProductCopy.options[this.props.key] = this.state.newValue;
-      Session.set("cartProduct", cartProductCopy);
+  componentWillUpdate: function (nextProps, nextState) {
+    if (nextState.newValue != this.state.initialValue) {
+       var cartProductCopy = _.extend({}, Session.get("cartProduct"));
+       cartProductCopy.options[this.props.key] = nextState.newValue;
+       Session.set("cartProduct", cartProductCopy);
     }
   },
 

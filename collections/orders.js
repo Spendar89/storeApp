@@ -9,9 +9,16 @@ Helpers.addPermissions(Orders);
 
 Orders.after.update(function (userId, order) {
   if (!order.active) {
-    Carts.update({ _id: order.cartId}, { active: false });
+    Carts.update({ userId: userId, _id: order.cartId}, { $set: { active: false } });
   }
+});
 
+Orders.before.insert(function (userId, order) {
+  if (!order.cartId) {
+    return false;
+  } else if (Orders.findOne({cartId: order.cartId})) {
+    return false;
+  }
 });
 
 Order.prototype = {
@@ -21,20 +28,21 @@ Order.prototype = {
     return this.data[key];
   },
 
-  setDefault: function () {
+  setDefault: function (cart) {
     var user = Meteor.user();
+    var defaultAddress = {
+      houseNumber: "default number",
+      street: "default street",
+      city: "default city",
+      state: "default state",
+      zipcode: "default zipcode"
+    };
     this.data = {
-      cartId: Session.get("cartId"),
+      cartId: cart && cart.active && cart._id,
       userId: user._id,
       firstName: user.firstName || "",
       lastName: user.lastName || "",
-      address: {
-        houseNumber: "default number",
-        street: "default street",
-        city: "default city",
-        state: "default state",
-        zipcode: "default zipcode"
-      },
+      address: user.address || defaultAddress,
       tax: 0,
       active: true,
       status: "checkout",
@@ -51,16 +59,12 @@ Order.prototype = {
     var afterSave = function (err, success) {
       return err || success;
     };
+    console.log("Saving default orrrderrr!!!");
     return Meteor.call("ordersUpsert", this.data, afterSave);
   },
 
-  getCart: function () {
-    var cartId = this.data.cartId;
-    return Carts.findOne(cartId);
-  },
-
   getTotal: function () {
-    var cart = this.getCart();
+    var cart = Session.get("cart")
     return cart.total || cart.subtotal;
   }
 };

@@ -18,3 +18,6 @@ accounts-ui-bootstrap-3-blaze
 stripe
 collection-hooks
 npm
+iron-router-progress
+less
+underscore

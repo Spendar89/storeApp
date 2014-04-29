@@ -25,14 +25,12 @@ _.extend(Carts, {
 Helpers.addPermissions(Carts);
 
 Carts.before.update(function (userId, cart, fieldNames, modifier) {
-  if (cart.checkedOut && cart.active) {
-    modifier.active = false;
-  } else if (!cart.checkedOut && !cart.active) {
-    modifier.active = true;
-  } else {
+  if (modifier && modifier.cartProducts) {
     var subtotal = Carts.getSubtotal(modifier);
-    // TODO: change total to reflect subtotal + tax - promos/discounts
     modifier.subtotal = modifier.total = subtotal;
   }
+});
 
+Carts.before.remove(function (userId, cart) {
+  Orders.remove({userId: userId, cartId: cart._id});
 });
