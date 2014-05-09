@@ -6,8 +6,9 @@ CartManager = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
+    var cart = Session.get("cart") || Session.get("newCart");
     return {
-      cart: Carts.findOne(Session.get("cartId")) || Session.get("newCart"),
+      cart: cart,
       allCarts: Carts.find().fetch()
     };
   },
@@ -17,10 +18,11 @@ CartManager = React.createClass({
   },
 
   render: function () {
-    return (
-      <div className="cart-manager-div">
-        { _.map(this.state.allCarts, this.renderCart) }
-      </div>
-    )
+    if (_.any(this.state.allCarts)) {
+      var content =  _.map(this.state.allCarts, this.renderCart);
+    } else {
+      var content = this.renderCart(this.state.cart);
+    }
+    return  <div className="cart-manager-div">{content}</div>
   }
 });

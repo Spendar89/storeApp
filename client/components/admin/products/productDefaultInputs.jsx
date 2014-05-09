@@ -16,8 +16,11 @@ ProductDefaultInputs = React.createClass({
   },
 
   renderDefaultInput: function(input) {
+    var makeEditable;
+    if (input.label === "description")  makeEditable = true;
     return <ProductDefaultInput key={input.label}
                                 value={input.value}
+                                makeEditable={makeEditable}
                                 handleUpdate={this.props.handleUpdate}/>
   },
 

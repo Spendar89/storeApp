@@ -12,27 +12,18 @@ AdminOrderRow = React.createClass({
     Meteor.call("ordersRemove", order._id);
   },
 
+  componentWillMount: function () {
+    this.defaultColumns = _.keys(this.props.collection);
+  },
+
   render: function () {
-    var order = this.props.order;
-    var cart = Carts.findOne(order.cartId)
-    var cartProduct = _.compact(cart.cartProducts)[0];
-    var imageId = cartProduct ? cartProduct.product.imageIds[0] : null;
-    var image = ProductImages.findOne(imageId);
+    var columns = this.props.columns || this.defaultColumns;
     return (
-      <div className="media" key={this.props.key}>
-        <a className="pull-left" href="#">
-          <img className="img-circle media-object"
-               src={image && image.url()}
-               width="64"
-               alt=""/>
-        </a>
-        <div className="media-body">
-          <h5 className="media-heading">ID: {order._id}</h5>
-          <p>Customer: {order.firstName} {order.lastName}</p>
-          <p>Status: {order.status}</p>
-          <p>Total: ${cart.total}</p>
-        </div>
-      </div>
-    )
+      <tr>
+        {_.map(columns, function(column, i) {
+          return <td key={i}> {this.props.collection[column]} </td>;
+        }.bind(this))}
+      </tr>
+    );
   }
 });

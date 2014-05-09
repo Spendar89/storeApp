@@ -20,13 +20,8 @@ ApplicationController = RouteController.extend({
   },
 
   setUserSession: function () {
-    StoreApp.currentUser = new User(Meteor.user());
-    Session.set("currentUser", Meteor.user());
-  },
-
-  setDefaultSessions: function () {
-    this.setUserSession();
-    this.setStoreSession();
+    // StoreApp.currentUser = new User(Meteor.user());
+    // Session.set("currentUser", Meteor.user());
   },
 
   setFriendCart: function () {
@@ -38,36 +33,12 @@ ApplicationController = RouteController.extend({
     }
   },
 
-  setOrderSession: function () {
-    var order = Orders.findOne();
-    var cart = Carts.findOne();
-    if (order) {
-      Session.set("order", order);
-    } else if (cart) {
-      console.log("inserting new order...");
-      // make sure to change this...
-      var newOrder = new Order();
-      newOrder.setDefault(cart);
-      newOrder.save();
-    }
-
-  },
-
-  setPaidOrdersSession: function () {
-    var paidOrders = Orders.find({
-      active: false,
-      userId: Meteor.userId()
-    });
-    Session.set("paidOrders", paidOrders.fetch());
-  },
-
   setCartSession: function () {
-    var cart = Carts.findOne();
+    var cart = Meteor.user() ? Carts.findOne() : Session.get("cart");
     if (cart) {
       Session.set("cart", cart);
-      Session.set("cartId", cart._id);
     } else {
-      console.log("inserting new cart...");
+      console.log("setting new cart...");
       this.setDefaultCartSession();
     }
   },
@@ -75,8 +46,11 @@ ApplicationController = RouteController.extend({
   setDefaultCartSession: function () {
     var newCart =  Carts.build(Meteor.userId());
     if (newCart) {
-      Session.set("newCart", newCart);
-      Meteor.call("cartsUpsert", newCart);
+      if (Meteor.user()) {
+        Meteor.call("cartsUpsert", newCart);
+      } else {
+        Session.set("cart", newCart);
+      }
     }
   },
 
@@ -90,18 +64,15 @@ ApplicationController = RouteController.extend({
 
   onBeforeAction: function () {
     if (this.ready()) {
-      this.setDefaultSessions();
-
-      // means its checkout since cart_id is in
+      this.setStoreSession();
       this.setCartSession();
-      this.setOrderSession();
-      // this.setPaidOrdersSession();
     }
   },
 
   action: function () {
     if (this.ready()) {
       this.render();
+      $('body, html').removeClass('admin');
     }
   }
 });

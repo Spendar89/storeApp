@@ -2,14 +2,14 @@
  * @jsx React.DOM
  */
 
-OrderNameForm = React.createClass({
+CartNameForm = React.createClass({
   mixins: [ ReactMeteor.Mixin, DefaultFormMixin ],
 
   getMeteorState: function () {
-    return Session.get("order");
+    return Session.get("cart");
   },
 
   componentWillUpdate: function (nextProps, nextState) {
-    Meteor.call("ordersUpsert", nextState);
+    Meteor.call("cartsUpsert", nextState);
   }
 });

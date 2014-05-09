@@ -6,9 +6,10 @@ StripeCardForm = React.createClass({
   mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
 
   getMeteorState: function () {
-    var name = StoreApp.currentUser.fullName();
+    var user = Meteor.user() || {};
+    var name = user.firstName + " " + user.lastName;
     //also add option for order address
-    var address = Session.get("order").address;
+    var address = Session.get("cart").address;
     return {
       number: null,
       cvc: null,
@@ -30,7 +31,7 @@ StripeCardForm = React.createClass({
       this.setState({error: err});
     } else {
       console.log("Stripe customer success! ");
-      console.log(res);
+      Session.set("stripeCustomer", res);
     }
   },
 

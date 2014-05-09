@@ -15,16 +15,22 @@ AdminProductsIndexController = ApplicationController.extend({
     if (productGroup) {
       return {
         productGroup: productGroup,
-        newProduct: Products.getNewProduct(productGroup)
+        newProduct: Products.getNewProduct(productGroup),
+        products: Products.find({productGroupId: productGroup._id}).fetch()
       };
     }
   },
 
   onAfterAction: function () {
     this.defaultTemplate().rendered = function () {
-      React.renderComponent(AdminProductsBlock({key: this.params._id}),
+      $('body, html').addClass('admin');
+      var product = Session.get("editProduct") || Session.get("newProduct");
+      React.renderComponent(AdminProductsBlock({ key: this.params._id,
+                                                 products:  this.data().products,
+                                                 editProduct: Session.get("editProduct") }),
                             document.getElementById('adminProductsBlock'));
-      React.renderComponent(AdminProductForm({}),
+
+      React.renderComponent(AdminProductForm({ productGroup: this.data().productGroup }),
                             document.getElementById('adminProductForm'));
     }.bind(this);
   }

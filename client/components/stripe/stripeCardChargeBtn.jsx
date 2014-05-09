@@ -9,7 +9,7 @@ StripeCardChargeBtn = React.createClass({
         <div className="col-sm-12">
           <a  className="btn btn-success form-control"
               onClick={this.props.onClick}>
-            Charge ${this.props.orderTotal} to Card
+            Charge ${this.props.cartTotal} to Card
           </a>
         </div>
       </div>

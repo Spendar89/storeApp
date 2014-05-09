@@ -16,11 +16,14 @@ AllowedValueInput = React.createClass({
     return (
       <div className="form-group allowed-value-inputs">
         <div className="col-sm-8">
-          <input  required value={this.props.value} className="form-control"
+          <input  required
+                  value={this.props.value}
+                  className="form-control"
                   onChange={this.handleChange}/>
         </div>
         <div className="col-sm-4">
-          <a className="btn btn-danger form-control" onClick={this.removeValue}> Remove </a>
+          <a className="btn btn-danger form-control"
+             onClick={this.removeValue}> Remove </a>
         </div>
       </div>
     )

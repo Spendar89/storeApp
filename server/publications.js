@@ -79,9 +79,9 @@ Meteor.publish("checkoutCartOrder", function (cartId) {
 
 Meteor.publish("activeCartOrder", function () {
   if (this.userId) {
-    var cart = Carts.find({userId: this.userId, active: true}, {limit: 1});
-    var order = Orders.find({userId: this.userId, active: true}, {limit: 1});
-    return _.compact([cart, order]);
+    return Carts.find({userId: this.userId, active: true}, {limit: 1});
+  } else {
+    return [];
   }
 });
 
@@ -100,6 +100,8 @@ Meteor.publish("storeDefaults", function (storeId) {
     //publishes all user fields except for createdAt and services
     user = Meteor.users.find({_id: this.userId},
                              {fields: {createdAt: 0, services: 0}});
+  } else {
+    user = Meteor.users.find();
   }
 
   return _.compact([stores, productGroups,

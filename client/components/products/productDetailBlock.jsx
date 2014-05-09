@@ -13,13 +13,20 @@ ProductDetailBlock = React.createClass({
     };
   },
 
+  componentDidMount: function () {
+    var domNode = this.getDOMNode();
+    this.$domNode = $(domNode);
+    this.$content = $(this.state.product.description);
+    this.$domNode.find(".description").html(this.$content);
+  },
+
   renderBasic: function () {
     var product = this.state.product;
     return (
             <div className="product-basic-div">
               <h1> {product.headline || product.name} </h1>
               <h2> ${product.price} </h2>
-              <p> {product.description} </p>
+              <p className="description"></p>
             </div>
             )
   },

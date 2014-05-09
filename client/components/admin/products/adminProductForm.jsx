@@ -7,20 +7,19 @@ AdminProductForm = React.createClass({
 
   getMeteorState: function () {
     return {
-      productGroup: Session.get("productGroup"),
-      product: Session.get("editProduct") || Session.get("newProduct")
+      product: (Session.get("editProduct") || Session.get("newProduct"))
     };
   },
 
   renderPropertyInputs: function () {
-    var allRules = this.state.productGroup.productPropertyRules;
+    var allRules = this.props.productGroup.productPropertyRules;
     var productPropertyRules = _.filter(allRules, function (rule) {
       return rule.kind != 'option';
     });;
     return <ProductPropertyInputs productPropertyRules={productPropertyRules}
                                   handleUpdate={this.handlePropertiesUpdate}
-                                  properties={this.state.product.properties}
-                                  productGroup={this.state.productGroup}
+                                  product = {this.state.product}
+                                  productGroup={this.props.productGroup}
                                   handleSubmit={this.handleSubmit} />
   },
 
@@ -39,20 +38,24 @@ AdminProductForm = React.createClass({
     return <ProductOptionInputs name={key}
                                 values={values}
                                 key={key}
-                                handleUpdate={this.handleOptionsUpdate} />
+                                handleChange={this.handleOptionsUpdate} />
   },
 
   renderImagesInput: function () {
     var product = this.state.product;
-    return <ProductImagesInput productGroup={this.state.productGroup}
+    return <ProductImagesInput productGroup={this.props.productGroup}
                                imageIds={this.state.product.imageIds}
                                product={product}
                                handleUpdate={this.handleImagesUpdate} />
   },
 
   updateProduct: function (productCopy) {
-    Session.set("editProduct", productCopy);
+    ProductActions.edit(productCopy);
   },
+
+  // componentDidUpdate: function () {
+  //   ProductActions.edit(this.state.product);
+  // },
 
   handleImagesUpdate: function (newImageIds) {
     var product = this.state.product;
@@ -81,16 +84,14 @@ AdminProductForm = React.createClass({
     this.updateProduct(productCopy)
   },
 
-  handleSubmit: function () {
-    Meteor.call("productsUpsert", this.state.product, this.afterSave);
-  },
+  // handleOptionsNew: function (optionName) {
+  //   var productCopy = _.extend({}, this.state.product);
+  //   productCopy.options[optionName].push("");
+  //   this.updateProduct(productCopy);
+  // },
 
-  afterSave: function (error, success) {
-    if (success) {
-      // Do nothing for now
-    } else {
-      this.setState({ error: error });
-    }
+  handleSubmit: function () {
+    ProductActions.upsert(this.state.product);
   },
 
   componentDidMount: function () {
@@ -143,7 +144,7 @@ AdminProductForm = React.createClass({
     if (isEditing) {
       var headerText = "Edit " + this.state.product.name
     } else {
-      var headerText = "Add a New " + this.state.productGroup.name;
+      var headerText = "Add a New " + this.props.productGroup.name;
     }
 
     return (
@@ -156,7 +157,7 @@ AdminProductForm = React.createClass({
             <div className="col-sm-9 pull-right">
               <a href="#" className="btn btn-primary form-control"
                           onClick={this.handleSubmit}>
-                Submit {this.state.productGroup.name}
+                Submit {this.props.productGroup.name}
               </a>
             </div>
           </div>

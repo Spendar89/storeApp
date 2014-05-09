@@ -1,22 +1,20 @@
-AdminOrdersIndexController =  AdminOrdersIndexController.extend({
+AdminOrdersIndexController =  AdminController.extend({
 
   onBeforeAction: function () {
-    var data = this.data();
-    Session.set("orders", data.orders);
-    Session.set("carts", data.carts);
+    Session.set("orders", this.data().orders);
   },
 
   data: function () {
     return {
-      orders: Orders.find().fetch(),
-      carts:  Carts.find().fetch()
+      orders: Carts.find({status: "ordered"}).fetch()
     };
   },
 
   onAfterAction: function () {
     this.defaultTemplate().rendered = function () {
-      React.renderComponent(AdminOrdersBlock({}),
-        document.getElementById('adminOrdersBlock')
+      $('body, html').addClass('admin');
+      React.renderComponent(AdminOrdersTable({}),
+        document.getElementById('adminOrdersTable')
       );
     };
 

@@ -10,7 +10,7 @@ StripeCardBlock = React.createClass({
   },
 
   renderRemoveCartBtn: function () {
-    if (this.props.order.active) {
+    if (this.props.cart.active) {
       return (
         <div className="col-sm-12 remove-card-div">
           <a className=" remove-card"

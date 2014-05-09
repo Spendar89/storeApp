@@ -88,21 +88,25 @@ Meteor.methods({
     }
   },
 
-  stripeChargesCreate: function (amount, customerId, orderId) {
+  stripeChargesCreate: function (amount, customerId, cart) {
     var charge = _StripeCharges.create({
       amount: amount,
       currency: "USD",
       customer: customerId
     });
     if (!charge.id) return charge;
-    var order = {active: false, status: "paid", payment: {
-      method: "stripe",
-      chargeId: charge.id,
-      amount: amount
-    }};
-    console.log("Charge successful!");
+    var updates = {
+      active: false,
+      status: "ordered",
+      payment: {
+        method: "stripe",
+        chargeId: charge.id,
+        amount: amount
+      }
+    };
+    var cartUpdated = _.extend(cart, updates);
     console.log(charge);
-    return Orders.update({_id: orderId}, {$set: order});
+    return Carts.upsert({_id: cart._id}, cartUpdated);
   },
 
   stripeCustomersCreate: function (user, token) {
@@ -113,7 +117,7 @@ Meteor.methods({
   },
 
   stripeCustomersCreateCard: function (user, token) {
-    var stripeCustomer = user.stripeCustomer;
+    var stripeCustomer = user && user.stripeCustomer;
     if (stripeCustomer) {
       _StripeCustomers.createCard(stripeCustomer.id, {card: token});
       return Meteor.call("usersUpdateStripeCustomer", user);
@@ -139,11 +143,14 @@ Meteor.methods({
   },
 
   usersUpdateStripeCustomer: function (user, _stripeCustomer) {
-    console.log("USERS UPDATE STRIPE CUSTOM!!");
-    var stripeCustomer = _stripeCustomer || Meteor.call("stripeCustomersRetrieve", user.stripeCustomer.id);
-    console.log(stripeCustomer);
-    if (!stripeCustomer.id || stripeCustomer.deleted) stripeCustomer = null;
-    return Users.update({ _id: user._id }, { $set: { stripeCustomer: stripeCustomer } });
+    if (user) {
+      var stripeCustomer = _stripeCustomer || Meteor.call("stripeCustomersRetrieve", user.stripeCustomer.id);
+      if (!stripeCustomer.id || stripeCustomer.deleted) stripeCustomer = null;
+      return Users.update({ _id: user._id }, { $set: { stripeCustomer: stripeCustomer } });
+    } else {
+      return _stripeCustomer;
+    }
+
   },
 
   productPropertyRulesUpsert: function (rule, callback) {
@@ -153,6 +160,15 @@ Meteor.methods({
 
   productPropertyRulesRemove: function (ProductPropertyRule) {
     return ProductPropertyRules.remove(ProductPropertyRule._id);
+  },
+
+  handleViewAction: function (action) {
+    var key = action.key,
+      type = action.actionType,
+      payload = action.payload;
+    AppDispatcher.dispatch(key, type, payload);
   }
+
+
 
 });

@@ -9,24 +9,33 @@
   // }
 
 ProductPropertyRuleInput = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
-
-  getInitialState: function () {
-    return this.props.productPropertyRule;
-  },
 
   addAllowedValue: function () {
-    var ruleCopy = _.extend({},this.state);
+    var ruleCopy = _.extend({},this.props.productPropertyRule);
     var valuesCopy = ruleCopy.allowedValues.concat([""]);
     this.handleAllowedValues(valuesCopy);
   },
 
   handleAllowedValues: function (newAllowedValues) {
-    this.setState({allowedValues: newAllowedValues});
+    var ruleCopy = _.extend({},this.props.productPropertyRule);
+    ruleCopy.allowedValues = newAllowedValues;
+    this.handleChange(ruleCopy);
   },
 
-  componentDidUpdate: function () {
-    this.props.handleChange(this.props.key, this.state);
+  handleChange: function (productPropertyRule) {
+    this.props.handleChange(this.props.key, productPropertyRule);
+  },
+
+  handleKind: function (e) {
+    var ruleCopy = _.extend({},this.props.productPropertyRule);
+    ruleCopy.kind = e.target.value;
+    this.handleChange(ruleCopy);
+  },
+
+  handleName: function (e) {
+    var ruleCopy = _.extend({},this.props.productPropertyRule);
+    ruleCopy.name = e.target.value;
+    this.handleChange(ruleCopy);
   },
 
   renderNameInput: function (productPropertyRule) {
@@ -38,9 +47,9 @@ ProductPropertyRuleInput = React.createClass({
         </label>
         <div className="col-sm-9">
           <input  required
-                  className="form-control"
-                  valueLink={this.linkState('name')}/>
-
+                  value={this.props.productPropertyRule.name}
+                  onChange={this.handleName}
+                  className="form-control"/>
         </div>
         </div>
       </div>
@@ -55,7 +64,8 @@ ProductPropertyRuleInput = React.createClass({
           </label>
           <div className="col-sm-9">
             <select className="form-control"
-                    valueLink={this.linkState('kind')}>
+                    value={this.props.productPropertyRule.kind}
+                    onChange={this.handleKind}>
               <option value="text">Text</option>
               <option value="number">Number</option>
               <option value="product">Product</option>
@@ -75,7 +85,7 @@ ProductPropertyRuleInput = React.createClass({
               Allowed
             </label>
             <div className="col-sm-9 pull-right">
-              <AllowedValueInputs allowedValues={this.state.allowedValues}
+              <AllowedValueInputs allowedValues={this.props.productPropertyRule.allowedValues}
                                   handleChange={this.handleAllowedValues}/>
               <a  className="btn btn-white form-control"
                   onClick={this.addAllowedValue}>

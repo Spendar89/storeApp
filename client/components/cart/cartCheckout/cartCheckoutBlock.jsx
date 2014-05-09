@@ -41,15 +41,20 @@ CartCheckoutBlock = React.createClass({
     )
   },
 
-  renderCartForm: function (cart, cartProducts) {
+  renderCartProducts: function (cart, cartProducts) {
+    var subtotal = cart.subtotal || Carts.getSubtotal(cart);
     return (
       <ul className="cart-products-list col-sm-8 col-sm-offset-2">
         {cartProducts.map(this.renderCartProduct)}
         <li className="cart-product list-item col-sm-12">
-          <h2 className="form-header col-sm-12"> Subtotal: ${cart.subtotal}</h2>
+          <h2 className="form-header col-sm-12"> Subtotal: ${subtotal}</h2>
         </li>
       </ul>
     )
+  },
+
+  renderCartOrderForm: function () {
+    return <CartCheckoutForm cart={this.state.cart} className="col-sm-12"/>
   },
 
   render: function () {
@@ -61,12 +66,11 @@ CartCheckoutBlock = React.createClass({
         <div className="checkout-block">
           <div className="cart-products-div">
             <h1 className="centered">{header}</h1>
-            {this.renderCartForm(cart, cartProducts)}
+            {this.renderCartProducts(cart, cartProducts)}
           </div>
           <div className="col-sm-12 order-form-div">
             <div className="col-sm-8 col-sm-offset-2">
-              <OrderForm active={cart.active}
-                         className="col-sm-12"/>
+              {this.renderCartOrderForm()}
             </div>
           </div>
         </div>

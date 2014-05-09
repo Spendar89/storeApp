@@ -3,34 +3,24 @@
  */
 
 AdminProductsBlock = React.createClass({
-  mixins: [ReactMeteor.Mixin],
-
-  getMeteorState: function () {
-    return {
-      products: Products.find({productGroupId: this.props.key}, {
-        sort: {date_created: -1}
-      }).fetch(),
-      editProduct: (Session.get("editProduct") || {})
-    };
-  },
 
   handleEdit: function (i) {
-    var product = this.state.products[i];
-    Session.set("newProduct", null);
-    Session.set("editProduct", product);
+    var product = this.props.products[i];
+    ProductActions.edit(product);
   },
 
   handleRemove: function (i) {
-    var product = this.state.products[i];
-    Meteor.call("productsRemove", product._id);
+    var product = this.props.products[i];
+    ProductActions.remove(product);
   },
 
   renderProduct: function (product, i) {
+    var editProduct = this.props.editProduct || {};
     return BlockRow({
       key: i,
-      isLast: i + 1 === this.state.products.length,
+      isLast: i + 1 === this.props.products.length,
       doc: product,
-      currentlyEditing: this.state.editProduct._id === product._id,
+      currentlyEditing: editProduct._id === product._id,
       handleEdit: this.handleEdit,
       handleRemove: this.handleRemove,
       classString: 'products',
@@ -43,7 +33,7 @@ AdminProductsBlock = React.createClass({
       <div className="col-sm-12">
         <ul className="col-sm-12 well">
         <div className="header"> {this.props.header} </div>
-        {_.map(this.state.products, this.renderProduct)}
+        {_.map(this.props.products, this.renderProduct)}
         </ul>
       </div>
     );

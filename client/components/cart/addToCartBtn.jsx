@@ -7,7 +7,8 @@ AddToCartBtn = React.createClass({
 
   getMeteorState: function () {
     return {
-      cart: Carts.findOne(Session.get("cartId")) || Session.get("newCart")
+      cart: Session.get("cart"),
+      user: Meteor.user()
     };
   },
 
@@ -54,10 +55,10 @@ AddToCartBtn = React.createClass({
   },
 
   saveCart: function (cartCopy) {
-    if (Session.get("currentUser")) {
+    if (this.state.user) {
       Meteor.call("cartsUpsert", cartCopy, this.afterSave);
     } else {
-      Session.set("newCart", cartCopy);
+      Session.set("cart", cartCopy);
     }
     Session.set("cartIsOpen", true);
   },

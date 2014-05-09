@@ -14,7 +14,7 @@ ProductPropertyRulesInputs = React.createClass({
   },
 
   handleChange: function (index, newRule, removeValue) {
-    var rulesCopy = _.extend({}, this.props.productPropertyRules);
+    var rulesCopy = _.extend([], this.props.productGroup.productPropertyRules);
     if (rulesCopy[index] && removeValue) {
       rulesCopy.splice(index, 1);
     } else {

@@ -13,7 +13,12 @@ ProductGroupForm = React.createClass({
     var productGroupCopy = _.extend({}, this.state);
     productGroupCopy[key] = value;
     this.setState(productGroupCopy);
+    // this.setState({key: value});
   },
+
+  // componentDidUpdate: function () {
+  //   Session.set("editProductGroup", this.state);
+  // },
 
   handleNewProductPropertyRule: function () {
     var newRule = ProductPropertyRules.build();

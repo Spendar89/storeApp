@@ -13,6 +13,12 @@ CartProductOptionSelect = React.createClass({
     };
   },
 
+  componentWillMount: function () {
+    var cartProductCopy = _.extend({}, Session.get("cartProduct"));
+    cartProductCopy.options[this.props.key] = this.props.optionValues[0];
+    Session.set("cartProduct", cartProductCopy);
+  },
+
   componentWillUpdate: function (nextProps, nextState) {
     if (nextState.newValue != this.state.initialValue) {
        var cartProductCopy = _.extend({}, Session.get("cartProduct"));
@@ -34,10 +40,10 @@ CartProductOptionSelect = React.createClass({
     return (
       <div className="row margin-row">
         <div className="col-sm-12">
+          <label className="col-sm-10"> {this.props.key} </label>
           <select required="true"
-                  className="form-control bordered"
+                  className="form-control col-sm-10"
                   valueLink={this.linkState('newValue')}>
-                  <option>{this.props.key}</option>
             {this.props.optionValues.map(this.renderOptionValue)}
           </select>
         </div>

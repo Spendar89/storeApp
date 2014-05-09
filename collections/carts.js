@@ -2,15 +2,28 @@ Carts = new Meteor.Collection("carts");
 
 _.extend(Carts, {
   build: function (userId) {
+    var user = Meteor.user() || {};
+    var defaultAddress = {
+      houseNumber: "default number",
+      street: "default street",
+      city: "default city",
+      state: "default state",
+      zipcode: "default zipcode"
+    };
     return {
       storeId: "",
       userId: userId,
       cartProducts: [],
-      subtotal: 0,
-      discounts: 0,
-      total: 0,
+      subtotal: null,
+      discounts: null,
+      tax: null,
+      total: null,
       active: true,
-      checkedOut: false
+      status: "shopping",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      address: user.address || defaultAddress,
+      payment: {}
     };
   },
 

@@ -3,7 +3,11 @@ Users = Meteor.users;
 Helpers.addPermissions(Users);
 
 User = function (doc) {
-  this.data = doc;
+  this.data = doc || {
+    firstName: null,
+    lastName: null,
+    payments: {}
+  };
 };
 
 User.prototype = {

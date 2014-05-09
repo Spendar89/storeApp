@@ -3,39 +3,42 @@
  */
 
 ProductOptionInputs = React.createClass({
-  mixins: [ReactMeteor.Mixin, React.addons.LinkedStateMixin],
+  mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
     return {
-      name: this.props.name,
       values: this.props.values
     };
   },
 
-  addOptionValue: function () {
-    var valuesCopy = this.state.values.concat([""]);
+  handleChange: function (index, value) {
+    var valuesCopy = _.extend([], this.state.values);
+    valuesCopy[index] = value;
     this.setState({values: valuesCopy});
   },
 
-  handleOptionValueUpdate: function (valueKey, value) {
-    var valuesCopy = this.state.values.concat([]);
-    valuesCopy[valueKey] = value;
-    this.props.handleUpdate(this.state.name, valuesCopy);
+  handleNew: function () {
+    var valuesCopy = _.extend([], this.state.values);
+    this.setState({values: valuesCopy.concat("")});
+  },
+
+  componentDidUpdate: function () {
+    this.props.handleChange(this.props.name, this.state.values);
   },
 
   renderOptionValueInput: function (value, i) {
-    var handleUpdate = this.handleOptionValueUpdate;
-    return <ProductOptionValueInput key={i}
-                                    value={value}
-                                    handleUpdate={handleUpdate}/>
+    return <ProductOptionInput key={i}
+                               value={value}
+                               handleChange={this.handleChange}/>
   },
 
   render: function () {
+    console.log("rerendering!!!");
     return (
       <div className="product-option-input-div">
         <div className="form-group">
           <label className="col-sm-3 control-label">
-            {this.state.name}
+            {this.props.name}
           </label>
           <div className="col-sm-9">
             {this.state.values.map(this.renderOptionValueInput)}
@@ -45,7 +48,7 @@ ProductOptionInputs = React.createClass({
          <div className="col-sm-9 pull-right">
           <a  className="btn btn-success form-control"
               href="#"
-              onClick={this.addOptionValue}>
+              onClick={this.handleNew}>
             Add Option Value
           </a>
         </div>

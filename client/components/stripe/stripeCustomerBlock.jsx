@@ -6,32 +6,35 @@ StripeCustomerBlock = React.createClass({
   mixins: [ReactMeteor.Mixin],
 
   getMeteorState: function () {
+    var cart = Session.get("cart");
     return {
-      orderTotal: Session.get("cart").total,
+      cartTotal: cart.total || Carts.getSubtotal(cart),
       showForm: false
-    }
+    };
   },
 
   deleteCustomer: function () {
     var stripeCustomerId = this.props.stripeCustomer.id;
-    Meteor.call("stripeCustomersDelete", this.props.user)
+    Meteor.call("stripeCustomersDelete", this.props.user);
   },
 
   afterCharge: function (err, res) {
+    // TODO: need to figure out how to publish cart
+    // without user Id... or figure out how to create
+    // user id before charge
     if (res) {
-      console.log("charge success.")
-      console.log(res);
-    } else {
-      console.log("charge fail.")
-      console.log(err);
+      var cart = _.extend({}, Session.get("cart"));
+      cart.active = false;
+      Session.set("cart", cart);
+    } else if (err) {
+      console.log("charge fail.", err);
     }
-
   },
 
   handleCharge: function () {
-    Meteor.call("stripeChargesCreate", this.state.orderTotal,
+    Meteor.call("stripeChargesCreate", this.state.cartTotal,
       this.props.stripeCustomer.id,
-      this.props.order._id,
+      this.props.cart,
       this.afterCharge
     );
   },
@@ -39,7 +42,7 @@ StripeCustomerBlock = React.createClass({
   renderCard: function (card, i) {
     return <StripeCardBlock key={i}
                             card={card}
-                            order={this.props.order}
+                            cart={this.props.cart}
                             stripeCustomer={this.props.stripeCustomer} />
   },
 
@@ -49,9 +52,9 @@ StripeCustomerBlock = React.createClass({
   },
 
   renderChargeStripeBtn: function () {
-    if (this.props.order.active) {
+    if (this.props.cart.active) {
       return <StripeCardChargeBtn onClick={this.handleCharge}
-                                  orderTotal={this.state.orderTotal} />
+                                  cartTotal={this.state.cartTotal} />
     }
 
   },

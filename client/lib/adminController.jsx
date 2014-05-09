@@ -1,4 +1,4 @@
-AdminOrdersIndexController =  RouteController.extend({
+AdminController =  RouteController.extend({
   layoutTemplate: 'admin_layout',
 
   defaultTemplate: function () {
